@@ -159,5 +159,40 @@
         "planMedico": "Bronce",
         "fechaAlta": "2012-04-03",
         "fechaBaja": null
+    },
+    {
+        "id": 6,
+        "credencial": "00000006-01",
+        "tipoDocumento": "DNI",
+        "numeroDocumento": "66666666",
+        "nombre": "Juana",
+        "apellido": "Doe",
+        "fechaNacimiento": "1995-02-03",
+        "telefono": [
+            "1582719832"
+        ],
+        "email": [
+            "juana.doe@gmail.com"
+        ],
+        "direccion": [
+            {
+                "calle": "Calle Falsa",
+                "numero": "123",
+                "depto": null,
+                "localidad": "Hurlingham",
+                "codigoPostal": "1686"
+            }
+        ],
+        "parentesco": "Titular",
+        "situacionesTerapeuticas": [
+            {
+                "diagnostico": "Embarazo",
+                "fechaInicio": "2025-01-01",
+                "fechaFin": "2025-10-01"
+            }
+        ],
+        "planMedico": "Oro",
+        "fechaAlta": "2012-04-03",
+        "fechaBaja": null
     }
 ]
