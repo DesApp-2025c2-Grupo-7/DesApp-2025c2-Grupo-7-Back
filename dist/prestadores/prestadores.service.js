@@ -14,17 +14,43 @@ const common_1 = require("@nestjs/common");
 const prestadores_json_1 = __importDefault(require("../data/prestadores.json"));
 let PrestadoresService = class PrestadoresService {
     prestadores = prestadores_json_1.default;
+    calcularHorarioHasta(desde, duracionTurno, cantidadEspecialidades) {
+        const [horas, minutos] = desde.split(':').map(Number);
+        const duracionEnMinutos = parseInt(duracionTurno.replace(/\D/g, ''));
+        const turnosPorEspecialidad = 10;
+        const totalTurnos = turnosPorEspecialidad * cantidadEspecialidades;
+        const tiempoTotalMinutos = totalTurnos * duracionEnMinutos;
+        const fechaInicio = new Date();
+        fechaInicio.setHours(horas, minutos, 0, 0);
+        const fechaFin = new Date(fechaInicio.getTime() + tiempoTotalMinutos * 60000);
+        const horasFin = fechaFin.getHours().toString().padStart(2, '0');
+        const minutosFin = fechaFin.getMinutes().toString().padStart(2, '0');
+        return `${horasFin}:${minutosFin}`;
+    }
+    procesarPrestadorConHorarios(prestador) {
+        const prestadorProcesado = { ...prestador };
+        prestadorProcesado.direccion = prestador.direccion.map(dir => ({
+            ...dir,
+            horariosAtencion: dir.horariosAtencion.map(horario => ({
+                ...horario,
+                hasta: this.calcularHorarioHasta(horario.desde, horario.duracionTurno, prestador.especialidades.length)
+            }))
+        }));
+        return prestadorProcesado;
+    }
     findAll(q) {
-        if (!q)
-            return this.prestadores;
-        return this.prestadores.filter(p => p.nombreCompleto.toLowerCase().includes(q.toLowerCase()) ||
-            p.numeroCUIL.includes(q));
+        let prestadores = this.prestadores;
+        if (q) {
+            prestadores = prestadores.filter(p => p.nombreCompleto.toLowerCase().includes(q.toLowerCase()) ||
+                p.numeroCUIL.includes(q));
+        }
+        return prestadores.map(p => this.procesarPrestadorConHorarios(p));
     }
     findOne(id) {
         const prestador = this.prestadores.find(p => p.id === id);
         if (!prestador)
             throw new common_1.NotFoundException('Prestador no encontrado');
-        return prestador;
+        return this.procesarPrestadorConHorarios(prestador);
     }
 };
 exports.PrestadoresService = PrestadoresService;

@@ -2,6 +2,7 @@
     {
         "id": 1,
         "credencial": "00000001-01",
+        "grupoFamiliar": "00000001",
         "tipoDocumento": "DNI",
         "numeroDocumento": "32822776",
         "nombre": "Marcelo",
@@ -32,6 +33,7 @@
             }
         ],
         "parentesco": "Titular",
+        "titularId": null,
         "situacionesTerapeuticas": [
             {
                 "diagnostico": "Hipertension",
@@ -39,13 +41,13 @@
                 "fechaFin": null
             }
         ],
-        "planMedico": "Plata",
         "fechaAlta": "1999-03-17",
         "fechaBaja": "2030-03-17"
     },
     {
         "id": 2,
         "credencial": "00000002-01",
+        "grupoFamiliar": "00000002",
         "tipoDocumento": "DNI",
         "numeroDocumento": "35827839",
         "nombre": "Nicolás",
@@ -67,14 +69,15 @@
             }
         ],
         "parentesco": "Titular",
+        "titularId": null,
         "situacionesTerapeuticas": [],
-        "planMedico": "Oro",
         "fechaAlta": "2001-06-15",
         "fechaBaja": null
     },
     {
         "id": 3,
         "credencial": "00000003-01",
+        "grupoFamiliar": "00000003",
         "tipoDocumento": "DNI",
         "numeroDocumento": "41894732",
         "nombre": "Nicolas",
@@ -97,14 +100,15 @@
             }
         ],
         "parentesco": "Titular",
+        "titularId": null,
         "situacionesTerapeuticas": [],
-        "planMedico": "Plata",
         "fechaAlta": "1999-04-03",
         "fechaBaja": null
     },
     {
         "id": 4,
         "credencial": "00000004-01",
+        "grupoFamiliar": "00000004",
         "tipoDocumento": "DNI",
         "numeroDocumento": "44444444",
         "nombre": "Melanie",
@@ -126,14 +130,15 @@
             }
         ],
         "parentesco": "Titular",
+        "titularId": null,
         "situacionesTerapeuticas": [],
-        "planMedico": "Oro",
         "fechaAlta": "2012-04-03",
         "fechaBaja": null
     },
     {
         "id": 5,
         "credencial": "00000005-01",
+        "grupoFamiliar": "00000005",
         "tipoDocumento": "DNI",
         "numeroDocumento": "55555555",
         "nombre": "Maricel",
@@ -155,44 +160,67 @@
             }
         ],
         "parentesco": "Titular",
+        "titularId": null,
         "situacionesTerapeuticas": [],
-        "planMedico": "Bronce",
         "fechaAlta": "2012-04-03",
         "fechaBaja": null
     },
     {
         "id": 6,
-        "credencial": "00000006-01",
+        "credencial": "00000001-02",
+        "grupoFamiliar": "00000001",
         "tipoDocumento": "DNI",
         "numeroDocumento": "66666666",
-        "nombre": "Juana",
-        "apellido": "Doe",
-        "fechaNacimiento": "1995-02-03",
+        "nombre": "Maria Elena",
+        "apellido": "Valdez",
+        "fechaNacimiento": "1989-07-22",
         "telefono": [
-            "1582719832"
+            "1137707882"
         ],
         "email": [
-            "juana.doe@gmail.com"
+            "maria.valdez@gmail.com"
         ],
         "direccion": [
             {
-                "calle": "Calle Falsa",
-                "numero": "123",
-                "depto": null,
-                "localidad": "Hurlingham",
-                "codigoPostal": "1686"
+                "calle": "Estanislao del Campo",
+                "numero": "478",
+                "depto": "2A",
+                "localidad": "Morón",
+                "codigoPostal": "1706"
             }
         ],
-        "parentesco": "Titular",
-        "situacionesTerapeuticas": [
+        "parentesco": "Cónyuge",
+        "titularId": 1,
+        "situacionesTerapeuticas": [],
+        "fechaAlta": "2010-05-15",
+        "fechaBaja": null
+    },
+    {
+        "id": 7,
+        "credencial": "00000001-03",
+        "grupoFamiliar": "00000001",
+        "tipoDocumento": "DNI",
+        "numeroDocumento": "50123456",
+        "nombre": "Sofia",
+        "apellido": "Valdez",
+        "fechaNacimiento": "2015-11-08",
+        "telefono": [
+            "1137707882"
+        ],
+        "email": [],
+        "direccion": [
             {
-                "diagnostico": "Embarazo",
-                "fechaInicio": "2025-01-01",
-                "fechaFin": "2025-10-01"
+                "calle": "Estanislao del Campo",
+                "numero": "478",
+                "depto": "2A",
+                "localidad": "Morón",
+                "codigoPostal": "1706"
             }
         ],
-        "planMedico": "Oro",
-        "fechaAlta": "2012-04-03",
+        "parentesco": "Hijo/a",
+        "titularId": 1,
+        "situacionesTerapeuticas": [],
+        "fechaAlta": "2015-11-08",
         "fechaBaja": null
     }
 ]

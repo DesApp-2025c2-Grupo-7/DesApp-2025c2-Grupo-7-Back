@@ -24,7 +24,7 @@
                     {
                         "dia": "Viernes",
                         "desde": "07:30",
-                        "hasta": "18:00",
+                        "hasta": "",
                         "duracionTurno": "15 minutos"
                     }
                 ]
@@ -38,7 +38,7 @@
                     {
                         "dia": "Lunes",
                         "desde": "09:00",
-                        "hasta": "17:00",
+                        "hasta": "",
                         "duracionTurno": "20 minutos"
                     }
                 ]
@@ -71,7 +71,7 @@
                     {
                         "dia": "Martes",
                         "desde": "08:00",
-                        "hasta": "16:00",
+                        "hasta": "",
                         "duracionTurno": "20 minutos"
                     }
                 ]
@@ -106,19 +106,19 @@
                     {
                         "dia": "Lunes",
                         "desde": "15:00",
-                        "hasta": "19:00",
+                        "hasta": "",
                         "duracionTurno": "15 minutos"
                     },
                     {
                         "dia": "Miércoles",
                         "desde": "10:00",
-                        "hasta": "14:00",
+                        "hasta": "",
                         "duracionTurno": "60 minutos"
                     },
                     {
                         "dia": "Viernes",
                         "desde": "12:00",
-                        "hasta": "18:00",
+                        "hasta": "",
                         "duracionTurno": "10 minutos"
                     }
                 ]

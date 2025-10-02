@@ -6,19 +6,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.GruposFamiliaresModule = void 0;
 const common_1 = require("@nestjs/common");
-const afiliados_module_1 = require("./afiliados/afiliados.module");
-const prestadores_module_1 = require("./prestadores/prestadores.module");
-const grupos_familiares_module_1 = require("./grupos-familiares/grupos-familiares.module");
-let AppModule = class AppModule {
+const grupos_familiares_controller_1 = require("./grupos-familiares.controller");
+const grupos_familiares_service_1 = require("./grupos-familiares.service");
+let GruposFamiliaresModule = class GruposFamiliaresModule {
 };
-exports.AppModule = AppModule;
-exports.AppModule = AppModule = __decorate([
+exports.GruposFamiliaresModule = GruposFamiliaresModule;
+exports.GruposFamiliaresModule = GruposFamiliaresModule = __decorate([
     (0, common_1.Module)({
-        imports: [afiliados_module_1.AfiliadosModule, prestadores_module_1.PrestadoresModule, grupos_familiares_module_1.GruposFamiliaresModule],
-        controllers: [],
-        providers: [],
+        controllers: [grupos_familiares_controller_1.GruposFamiliaresController],
+        providers: [grupos_familiares_service_1.GruposFamiliaresService],
+        exports: [grupos_familiares_service_1.GruposFamiliaresService],
     })
-], AppModule);
-//# sourceMappingURL=app.module.js.map
+], GruposFamiliaresModule);
+//# sourceMappingURL=grupos-familiares.module.js.map

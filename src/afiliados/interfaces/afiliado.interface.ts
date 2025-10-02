@@ -12,9 +12,18 @@ export interface SituacionTerapeutica {
     fechaFin: string | null;
 }
 
+export interface GrupoFamiliar {
+    id: string;
+    planMedico: string;
+    fechaAltaPlan: string;
+    fechaBajaPlan: string | null;
+    titularId: number;
+}
+
 export interface Afiliado {
     id: number;
     credencial: string;
+    grupoFamiliar: string;
     tipoDocumento: string;
     numeroDocumento: string;
     nombre: string;
@@ -24,8 +33,8 @@ export interface Afiliado {
     direccion: Direccion[];
     email: string[];
     parentesco: string;
+    titularId?: number | null;
     fechaAlta: string;
     fechaBaja: string | null;
     situacionesTerapeuticas?: SituacionTerapeutica[];
-    planMedico: string;
 }
