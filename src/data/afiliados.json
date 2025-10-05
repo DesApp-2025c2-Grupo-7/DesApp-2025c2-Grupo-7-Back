@@ -1,7 +1,8 @@
 [
     {
         "id": 1,
-        "credencial": "00000001-01",
+        "credencial": "00000001",
+        "sufijo": "01",
         "tipoDocumento": "DNI",
         "numeroDocumento": "32822776",
         "nombre": "Marcelo",
@@ -32,9 +33,101 @@
             }
         ],
         "parentesco": "Titular",
+        "grupoFamiliar": [
+            {
+                "id": 7,
+                "credencial": "00000001",
+                "sufijo": "02",
+                "tipoDocumento": "DNI",
+                "numeroDocumento": 44123432,
+                "nombre": "Gabriela",
+                "apellido": "Mayoni",
+                "fechaNacimiento": "1987-03-17",
+                "telefono": [
+                    "1137707865",
+                    "2374621612"
+                ],
+                "email": [
+                    "gaMayo@gmail.com",
+                    "asf.1703@gmail.com"
+                ],
+                "direccion": [
+                    {
+                        "calle": "Estanislao del Campo",
+                        "numero": "478",
+                        "depto": "2A",
+                        "localidad": "Morón",
+                        "codigoPostal": "1706"
+                    },
+                    {
+                        "calle": "Libertad",
+                        "numero": "610",
+                        "depto": null,
+                        "localidad": "Moreno",
+                        "codigoPostal": "1744"
+                    }
+                ],
+                "parentesco": "Esposo/a",
+                "situacionesTerapeuticas": [
+                    {
+                        "diagnostico": "Hipertension",
+                        "fechaInicio": "2000-08-01",
+                        "fechaFin": null
+                    }
+                ],
+                "planMedico": "Plata",
+                "fechaAlta": "1999-03-17",
+                "fechaBaja": "2030-03-17"
+            },
+            {
+                "id": 8,
+                "credencial": "00000001",
+                "sufijo": "03",
+                "tipoDocumento": "DNI",
+                "numeroDocumento": 44123432,
+                "nombre": "Ricardo",
+                "apellido": "Moyo",
+                "fechaNacimiento": "1987-03-17",
+                "telefono": [
+                    "1137707865",
+                    "2374621612"
+                ],
+                "email": [
+                    "gaMayo@gmail.com",
+                    "asf.1703@gmail.com"
+                ],
+                "direccion": [
+                    {
+                        "calle": "Estanislao del Campo",
+                        "numero": "478",
+                        "depto": "2A",
+                        "localidad": "Morón",
+                        "codigoPostal": "1706"
+                    },
+                    {
+                        "calle": "Libertad",
+                        "numero": "610",
+                        "depto": null,
+                        "localidad": "Moreno",
+                        "codigoPostal": "1744"
+                    }
+                ],
+                "parentesco": "Familiar",
+                "situacionesTerapeuticas": [
+                    {
+                        "diagnostico": "Alcoholico",
+                        "fechaInicio": "2000-08-01",
+                        "fechaFin": null
+                    }
+                ],
+                "planMedico": "Plata",
+                "fechaAlta": "1999-03-17",
+                "fechaBaja": "2030-03-17"
+            }
+        ],
         "situacionesTerapeuticas": [
             {
-                "diagnostico": "Hipertension",
+                "diagnostico": "Diabetes",
                 "fechaInicio": "2000-08-01",
                 "fechaFin": null
             }
@@ -45,7 +138,8 @@
     },
     {
         "id": 2,
-        "credencial": "00000002-01",
+        "credencial": "00000002",
+        "sufijo": "01",
         "tipoDocumento": "DNI",
         "numeroDocumento": "35827839",
         "nombre": "Nicolás",
@@ -67,6 +161,7 @@
             }
         ],
         "parentesco": "Titular",
+        "grupoFamiliar": [],
         "situacionesTerapeuticas": [],
         "planMedico": "Oro",
         "fechaAlta": "2001-06-15",
@@ -74,7 +169,8 @@
     },
     {
         "id": 3,
-        "credencial": "00000003-01",
+        "credencial": "00000003",
+        "sufijo": "01",
         "tipoDocumento": "DNI",
         "numeroDocumento": "41894732",
         "nombre": "Nicolas",
@@ -98,13 +194,15 @@
         ],
         "parentesco": "Titular",
         "situacionesTerapeuticas": [],
+        "grupoFamiliar": [],
         "planMedico": "Plata",
         "fechaAlta": "1999-04-03",
         "fechaBaja": null
     },
     {
         "id": 4,
-        "credencial": "00000004-01",
+        "credencial": "00000004",
+        "sufijo": "01",
         "tipoDocumento": "DNI",
         "numeroDocumento": "44444444",
         "nombre": "Melanie",
@@ -126,6 +224,7 @@
             }
         ],
         "parentesco": "Titular",
+        "grupoFamiliar": [],
         "situacionesTerapeuticas": [],
         "planMedico": "Oro",
         "fechaAlta": "2012-04-03",
@@ -133,7 +232,8 @@
     },
     {
         "id": 5,
-        "credencial": "00000005-01",
+        "credencial": "00000005",
+        "sufijo": "01",
         "tipoDocumento": "DNI",
         "numeroDocumento": "55555555",
         "nombre": "Maricel",
@@ -156,13 +256,15 @@
         ],
         "parentesco": "Titular",
         "situacionesTerapeuticas": [],
+        "grupoFamiliar": [],
         "planMedico": "Bronce",
         "fechaAlta": "2012-04-03",
         "fechaBaja": null
     },
-        {
+    {
         "id": 6,
-        "credencial": "00000006-01",
+        "credencial": "00000006",
+        "sufijo": "01",
         "tipoDocumento": "DNI",
         "numeroDocumento": "66666666",
         "nombre": "Juana",
@@ -184,6 +286,7 @@
             }
         ],
         "parentesco": "Titular",
+        "grupoFamiliar": [],
         "situacionesTerapeuticas": [
             {
                 "diagnostico": "Embarazo",

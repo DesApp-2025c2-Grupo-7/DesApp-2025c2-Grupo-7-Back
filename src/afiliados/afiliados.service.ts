@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import afiliadosData from '../data/afiliados.json'; // importa el JSON directo
-import type { Afiliado } from './interfaces/afiliado.interface';
+import afiliadosData from "../data/afiliados.json"// importa el JSON directo
+import type { Persona, Afiliado } from './interfaces/afiliado.interface';
 
 @Injectable()
 export class AfiliadosService {
-    private afiliados: Afiliado[] = afiliadosData;
+    private afiliados: Afiliado[] = afiliadosData as Afiliado[];
 
     findAll(q?: string): Afiliado[] {
         if (!q) return this.afiliados;
