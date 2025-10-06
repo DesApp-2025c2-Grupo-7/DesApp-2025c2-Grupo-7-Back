@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Afiliado } from './entities/afiliado.entity';
+import { Integrante } from './entities/integrante.entity';
 import { AfiliadosService } from './afiliados.service';
 import { AfiliadosController } from './afiliados.controller';
 
 @Module({
-    controllers: [AfiliadosController],
+    imports: [TypeOrmModule.forFeature([Afiliado, Integrante])],
     providers: [AfiliadosService],
-    exports: [AfiliadosService],
+    controllers: [AfiliadosController],
 })
 export class AfiliadosModule { }

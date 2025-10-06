@@ -20,28 +20,69 @@ let AfiliadosController = class AfiliadosController {
     constructor(service) {
         this.service = service;
     }
-    findAll(q) {
-        return this.service.findAll(q);
+    findAll() {
+        return this.service.findAll();
     }
     findOne(id) {
         return this.service.findOne(Number(id));
+    }
+    create(body) {
+        return this.service.create(body);
+    }
+    update(id, body) {
+        return this.service.update(Number(id), body);
+    }
+    remove(id) {
+        return this.service.remove(Number(id));
+    }
+    addIntegrante(id, body) {
+        return this.service.addIntegrante(Number(id), body);
     }
 };
 exports.AfiliadosController = AfiliadosController;
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('q')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Array)
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
 ], AfiliadosController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Object)
+    __metadata("design:returntype", void 0)
 ], AfiliadosController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AfiliadosController.prototype, "create", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], AfiliadosController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AfiliadosController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)(':id/integrantes'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], AfiliadosController.prototype, "addIntegrante", null);
 exports.AfiliadosController = AfiliadosController = __decorate([
     (0, common_1.Controller)('afiliados'),
     __metadata("design:paramtypes", [afiliados_service_1.AfiliadosService])

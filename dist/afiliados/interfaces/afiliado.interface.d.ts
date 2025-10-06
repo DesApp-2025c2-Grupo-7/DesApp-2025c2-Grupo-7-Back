@@ -10,7 +10,7 @@ export interface SituacionTerapeutica {
     fechaInicio: string | null;
     fechaFin: string | null;
 }
-export interface Afiliado {
+export interface Persona {
     id: number;
     credencial: string;
     tipoDocumento: string;
@@ -21,9 +21,17 @@ export interface Afiliado {
     telefono: string[];
     direccion: Direccion[];
     email: string[];
-    parentesco: string;
     fechaAlta: string;
     fechaBaja: string | null;
     situacionesTerapeuticas?: SituacionTerapeutica[];
     planMedico: string;
+}
+export interface Afiliado extends Persona {
+    sufijo: string;
+    parentesco: string;
+    grupoFamiliar: Integrante[];
+}
+export interface Integrante extends Persona {
+    sufijo: string;
+    parentesco: string;
 }

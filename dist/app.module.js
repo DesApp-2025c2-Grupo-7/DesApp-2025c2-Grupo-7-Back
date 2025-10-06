@@ -8,6 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
+const typeorm_1 = require("@nestjs/typeorm");
 const afiliados_module_1 = require("./afiliados/afiliados.module");
 const prestadores_module_1 = require("./prestadores/prestadores.module");
 let AppModule = class AppModule {
@@ -15,7 +17,25 @@ let AppModule = class AppModule {
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [afiliados_module_1.AfiliadosModule, prestadores_module_1.PrestadoresModule],
+        imports: [
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: (config) => ({
+                    type: 'postgres',
+                    host: config.get('DB_HOST') || 'localhost',
+                    port: Number(config.get('DB_PORT') || 5432),
+                    username: config.get('DB_USERNAME'),
+                    password: config.get('DB_PASSWORD'),
+                    database: config.get('DB_DATABASE'),
+                    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+                    synchronize: true,
+                }),
+            }),
+            afiliados_module_1.AfiliadosModule,
+            prestadores_module_1.PrestadoresModule,
+        ],
         controllers: [],
         providers: [],
     })
