@@ -6,7 +6,7 @@
         "especialidades": [
             "Odontología"
         ],
-        "tipoPrestacion": "Profesional Independiente",
+        "esProfesionalIndependiente": true,
         "telefono": [
             "1144445555",
             "1144445556"
@@ -53,7 +53,7 @@
             "Cardiología",
             "Nutrición"
         ],
-        "tipoPrestacion": "Centro Médico",
+        "esProfesionalIndependiente": false,
         "telefono": [
             "1177777778",
             "1177778889"

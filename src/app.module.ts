@@ -18,7 +18,7 @@ import { PrestadoresModule } from './prestadores/prestadores.module'; // opciona
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false, // SOLO para desarrollo
+        synchronize: true, // SOLO para desarrollo
       }),
     }),
     AfiliadosModule,

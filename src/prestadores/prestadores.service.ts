@@ -1,23 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import type { Prestador } from './interfaces/prestador.interface';
-import prestadoresData from '../data/prestadores.json';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Prestador } from '../prestadores/entities/prestador.entity';
 
 @Injectable()
 export class PrestadoresService {
-    private prestadores: Prestador[] = prestadoresData;
+    constructor(
+        @InjectRepository(Prestador) private prestadorRepo: Repository<Prestador>,
+    ) { }
 
-    findAll(q?: string): Prestador[] {
-        if (!q) return this.prestadores;
-        return this.prestadores.filter(
-            p =>
-                p.nombreCompleto.toLowerCase().includes(q.toLowerCase()) ||
-                p.numeroCUIL.includes(q)
-        );
+    findAll(): Promise<Prestador[]> {
+        return this.prestadorRepo.find();
     }
 
-    findOne(id: number): Prestador {
-        const prestador = this.prestadores.find(p => p.id === id);
-        if (!prestador) throw new NotFoundException('Prestador no encontrado');
-        return prestador;
+    async findOne(id: number): Promise<Prestador> {
+        const a = await this.prestadorRepo.findOne({ where: { id } });
+        if (!a) throw new NotFoundException(`Prestador ${id} no encontrado`);
+        return a;
     }
+
+    create(dto: Partial<Prestador>): Promise<Prestador> {
+        const ent = this.prestadorRepo.create(dto);
+        return this.prestadorRepo.save(ent);
+    }
+
+    async update(id: number, dto: Partial<Prestador>): Promise<Prestador> {
+        await this.prestadorRepo.update(id, dto);
+        return this.findOne(id);
+    }
+
+    async remove(id: number): Promise<void> {
+        await this.prestadorRepo.delete(id);
+    }
+
 }

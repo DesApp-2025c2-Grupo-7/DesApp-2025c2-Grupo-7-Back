@@ -1,6 +1,9 @@
+version: "3.8"
+
 services:
   db:
     image: postgres:15
+    restart: unless-stopped
     environment:
       POSTGRES_USER: devuser
       POSTGRES_PASSWORD: devpass
@@ -8,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+    - db_data:/var/lib/postgresql/data
 
   backend:
     build:
@@ -25,16 +28,21 @@ services:
       - "3000:3000"
     depends_on:
       - db
+    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4
+    restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "8080:80"
     depends_on:
-      - db
+        - db
+    volumes:
+      -  pgadmin_data:/var/lib/pgadmin # <— persistencia de la configuración de pgAdmin
 
 volumes:
   db_data:
+  pgadmin_data:
