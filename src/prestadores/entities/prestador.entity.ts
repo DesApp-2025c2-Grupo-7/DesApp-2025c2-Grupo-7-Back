@@ -3,8 +3,11 @@ import {
     PrimaryGeneratedColumn,
     Column,
     OneToMany,
+    ManyToMany,
+    JoinTable,
 } from 'typeorm';
 import { Direccion } from './direccion.entity';
+import { Especialidad } from '../../especialidades/entities/especialidades.entity';
 
 @Entity('prestadores')
 export class Prestador {
@@ -17,8 +20,9 @@ export class Prestador {
     @Column()
     nombreCompleto: string;
 
-    @Column({ type: 'json', nullable: true })
-    especialidades: string[];
+    @ManyToMany(() => Especialidad, { eager: true, cascade: true })
+    @JoinTable()
+    especialidades: Especialidad[];
 
     @Column({ default: false })
     esProfesionalIndependiente: boolean;

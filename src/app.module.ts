@@ -3,6 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AfiliadosModule } from './afiliados/afiliados.module';
 import { PrestadoresModule } from './prestadores/prestadores.module'; // opcional si ya lo tenés
+import { EspecialidadesModule } from './especialidades/especialidades.module';
+import { join } from 'path';
+
 
 @Module({
   imports: [
@@ -17,12 +20,13 @@ import { PrestadoresModule } from './prestadores/prestadores.module'; // opciona
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_DATABASE'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // SOLO para desarrollo
+        entities: [join(__dirname, '**', '*.entity{.ts,.js}')],
+        synchronize: true,
       }),
     }),
     AfiliadosModule,
     PrestadoresModule, // si querés también
+    EspecialidadesModule,
   ],
   controllers: [],
   providers: [],

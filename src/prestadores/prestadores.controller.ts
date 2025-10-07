@@ -16,14 +16,16 @@ export class PrestadoresController {
         return this.service.findOne(Number(id));
     }
 
+    // Crear prestador con especialidades
     @Post()
-    create(@Body() body: Partial<Prestador>) {
-        return this.service.create(body);
+    create(@Body() body: Partial<Prestador> & { especialidadIds?: number[] }) {
+        return this.service.create(body, body.especialidadIds || []);
     }
 
+    // Actualizar prestador con especialidades
     @Put(':id')
-    update(@Param('id') id: string, @Body() body: Partial<Prestador>) {
-        return this.service.update(Number(id), body);
+    update(@Param('id') id: string, @Body() body: Partial<Prestador> & { especialidadIds?: number[] }) {
+        return this.service.update(Number(id), body, body.especialidadIds || []);
     }
 
     @Delete(':id')

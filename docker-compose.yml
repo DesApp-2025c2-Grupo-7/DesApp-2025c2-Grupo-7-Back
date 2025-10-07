@@ -17,7 +17,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: [ "npm", "run", "start:dev" ]
+    command: [ "npm", "run", "start:docker" ]
     environment:
       DB_HOST: db
       DB_PORT: 5432
