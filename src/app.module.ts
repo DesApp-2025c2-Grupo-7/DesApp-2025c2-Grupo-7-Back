@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AfiliadosModule } from './afiliados/afiliados.module';
+import { PersonasModule } from './personas/persona.module';
 import { PrestadoresModule } from './prestadores/prestadores.module'; // opcional si ya lo tenés
 import { EspecialidadesModule } from './especialidades/especialidades.module';
 import { join } from 'path';
@@ -24,7 +24,7 @@ import { join } from 'path';
         synchronize: true,
       }),
     }),
-    AfiliadosModule,
+    PersonasModule,
     PrestadoresModule, // si querés también
     EspecialidadesModule,
   ],

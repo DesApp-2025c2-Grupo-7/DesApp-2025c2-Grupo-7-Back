@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Exponer puerto del backend
-EXPOSE 3000
+EXPOSE 3001
 
 # Comando por defecto (sobre-escribible desde docker-compose)
 CMD ["npm", "run", "start:dev"]

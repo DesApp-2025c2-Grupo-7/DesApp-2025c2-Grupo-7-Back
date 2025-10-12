@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: devuser
       POSTGRES_PASSWORD: devpass
-      POSTGRES_DB: desapp
+      POSTGRES_DB: desapp-normalized
     ports:
       - "5432:5432"
     volumes:
@@ -23,9 +23,9 @@ services:
       DB_PORT: 5432
       DB_USER: devuser
       DB_PASSWORD: devpass
-      DB_NAME: desapp
+      DB_NAME: desapp-normalized
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
       - db
     restart: unless-stopped
