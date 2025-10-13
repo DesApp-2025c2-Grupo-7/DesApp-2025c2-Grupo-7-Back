@@ -26,7 +26,6 @@ export class Persona {
   @Column({ type: 'enum', enum: ['AFILIADO', 'INTEGRANTE'] })
   tipoPersona: 'AFILIADO' | 'INTEGRANTE';
 
-  
   @Column({ length: 20 })
   tipoDocumento: string;
 
@@ -49,7 +48,7 @@ export class Persona {
   email: string[];
 
   @Column({ nullable: true })
-  parentesco?: string; // solo relevante si es integrante
+  parentesco?: string;
 
   @OneToMany(() => Direccion, (direccion) => direccion.persona, { cascade: true, eager: true })
   direccion: Direccion[];
@@ -58,11 +57,11 @@ export class Persona {
   situacionesTerapeuticas?: SituacionTerapeutica[];
 
   @ManyToOne(() => GrupoFamiliar, (grupo) => grupo.personas)
-  @JoinColumn({ name: 'grupoFamiliarId' }) // nueva columna FK
+  @JoinColumn({ name: 'grupoFamiliarId' })
   grupoFamiliar: GrupoFamiliar;
 
   @Column()
-  grupoFamiliarId: number; // FK hacia GrupoFamiliar
+  grupoFamiliarId: string; // FK hacia GrupoFamiliar
 
   @Column({ nullable: true })
   planMedico: string;

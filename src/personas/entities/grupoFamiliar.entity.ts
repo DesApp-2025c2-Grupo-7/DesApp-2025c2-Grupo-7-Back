@@ -1,8 +1,4 @@
-import { Entity, 
-    PrimaryColumn, 
-    Column, 
-    OneToMany 
-} from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 import { Persona } from './persona.entity';
 
 @Entity('grupos_familiares')
@@ -22,9 +18,6 @@ export class GrupoFamiliar {
   @Column({ type: 'date', nullable: true })
   fechaBaja: string | null;
 
-  @OneToMany(() => Persona, (persona) => persona.grupoFamiliar, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(() => Persona, (persona) => persona.grupoFamiliar, { eager: true })
   personas: Persona[];
 }
