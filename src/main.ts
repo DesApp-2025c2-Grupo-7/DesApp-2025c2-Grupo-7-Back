@@ -6,7 +6,7 @@ async function bootstrap() {
     logger: ['error', 'warn'], // solo errores y warnings
   });
   app.enableCors(); // permite peticiones desde el front en otro puerto
-  await app.listen(3001);
-  console.log('Backend corriendo en http://localhost:3001');
+  await app.listen(3000);
+  console.log('Backend corriendo en http://localhost:3000');
 }
 bootstrap();

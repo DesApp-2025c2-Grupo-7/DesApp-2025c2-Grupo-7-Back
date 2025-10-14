@@ -25,7 +25,7 @@ services:
       DB_PASSWORD: devpass
       DB_NAME: desapp-normalized
     ports:
-      - "3001:3001"
+      - "3000:3000"
     depends_on:
       - db
     restart: unless-stopped
