@@ -3,12 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Persona } from './entities/persona.entity';
 import { GrupoFamiliar } from './entities/grupoFamiliar.entity';
+import { Direccion } from './entities/direccionPersona.entity';
+import { SituacionTerapeutica } from './entities/situacionTerapeutica.entity';
+
+
 
 @Injectable()
 export class PersonaService {
   constructor(
     @InjectRepository(Persona) private personaRepo: Repository<Persona>,
     @InjectRepository(GrupoFamiliar) private grupoRepo: Repository<GrupoFamiliar>,
+    @InjectRepository(Direccion) private direccionRepository: Repository<Direccion>,
+    @InjectRepository(SituacionTerapeutica) private situacionRepo: Repository<SituacionTerapeutica>,
+
   ) { }
 
   findAll(): Promise<Persona[]> {
@@ -112,5 +119,88 @@ export class PersonaService {
       ...titular,
       grupoFamiliar: integrantes,
     } as Persona & { grupoFamiliar: Persona[] };
+  }
+
+  // DIRECCION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!----------------------------------------------------------------------------------------
+  // ────────────── Agregar dirección a una persona ──────────────
+  async addDireccion(personaId: number, dto: Partial<Direccion>) {
+    const persona = await this.personaRepo.findOne({
+      where: { id: personaId },
+      relations: ['direccion'],
+    });
+
+    if (!persona) throw new NotFoundException('Persona no encontrada');
+
+    const nuevaDireccion = this.direccionRepository.create({ ...dto, persona });
+    await this.direccionRepository.save(nuevaDireccion);
+
+    return this.personaRepo.findOne({
+      where: { id: personaId },
+      relations: ['direccion'],
+    });
+  }
+
+  // ────────────── Actualizar dirección ──────────────
+  async updateDireccion(personaId: number, direccionId: number, dto: Partial<Direccion>) {
+    const direccion = await this.direccionRepository.findOne({
+      where: { id: direccionId, personaId },
+    });
+
+    if (!direccion) throw new NotFoundException('Dirección no encontrada');
+    Object.assign(direccion, dto);
+    return this.direccionRepository.save(direccion);
+  }
+
+  // ────────────── Eliminar dirección ──────────────
+  async removeDireccion(personaId: number, direccionId: number) {
+    const direccion = await this.direccionRepository.findOne({
+      where: { id: direccionId, personaId },
+    });
+
+    if (!direccion) throw new NotFoundException('Dirección no encontrada');
+    await this.direccionRepository.remove(direccion);
+    return { message: 'Dirección eliminada correctamente' };
+  }
+
+  //SITUACION TERAPEUTICAA -----------------------------------------------------------------------------------------------------------------
+  async addSituacionTerapeutica(
+    personaId: number,
+    dto: Partial<SituacionTerapeutica>,
+  ) {
+    const persona = await this.personaRepo.findOne({
+      where: { id: personaId },
+    });
+    if (!persona) throw new NotFoundException('Persona no encontrada');
+
+    const nueva = this.situacionRepo.create({ ...dto, persona });
+    return await this.situacionRepo.save(nueva);
+  }
+
+  // ──────────────── Actualizar una situación terapéutica ────────────────
+  async updateSituacionTerapeutica(
+    personaId: number,
+    situacionId: number,
+    dto: Partial<SituacionTerapeutica>,
+  ) {
+    const situacion = await this.situacionRepo.findOne({
+      where: { id: situacionId, persona: { id: personaId } },
+    });
+    if (!situacion)
+      throw new NotFoundException('Situación terapéutica no encontrada');
+
+    Object.assign(situacion, dto);
+    return await this.situacionRepo.save(situacion);
+  }
+
+  // ──────────────── Eliminar una situación terapéutica ────────────────
+  async removeSituacionTerapeutica(personaId: number, situacionId: number) {
+    const situacion = await this.situacionRepo.findOne({
+      where: { id: situacionId, persona: { id: personaId } },
+    });
+    if (!situacion)
+      throw new NotFoundException('Situación terapéutica no encontrada');
+
+    await this.situacionRepo.remove(situacion);
+    return { message: 'Situación terapéutica eliminada correctamente' };
   }
 }
