@@ -3,11 +3,11 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { Especialidad } from './especialidades/entities/especialidades.entity';
 import { Prestador } from './prestadores/entities/prestador.entity';
-import { Direccion } from './prestadores/entities/direccion.entity';
+import { DireccionPrestador } from './prestadores/entities/direccionPrestador.entity';
 import { HorarioAtencion } from './prestadores/entities/horarioAtencion.entity';
 import { Persona } from './personas/entities/persona.entity';
 import { SituacionTerapeutica } from './personas/entities/situacionTerapeutica.entity';    
-import { Direccion as DireccionPersona } from './personas/entities/direccionPersona.entity';
+import { DireccionPersona } from './personas/entities/direccionPersona.entity';
 import { GrupoFamiliar } from './personas/entities/grupoFamiliar.entity';  
 import * as dotenv from 'dotenv';
 
@@ -22,7 +22,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_DATABASE || 'desapp',
     entities: [Especialidad, 
         Prestador, 
-        Direccion, 
+        DireccionPrestador, 
         HorarioAtencion, 
         Persona, 
         SituacionTerapeutica, 

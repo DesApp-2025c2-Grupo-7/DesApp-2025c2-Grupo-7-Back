@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { PersonaService } from './persona.service';
 import { Persona } from './entities/persona.entity';
-import { Direccion } from '../prestadores/entities/direccion.entity';
+import { DireccionPersona } from './entities/direccionPersona.entity';
 import { SituacionTerapeutica } from './entities/situacionTerapeutica.entity';
 
 
@@ -56,11 +56,14 @@ export class PersonaController {
     return this.personaService.getAfiliadoConGrupo(credencial);
   }
 
+
+
+  // CRUDs de DIRECCION de PERSONAS (AFILIADOS E INTEGRANTES)
   // ────────────── Agregar una dirección ──────────────
   @Post(':id/direcciones')
   addDireccion(
     @Param('id') id: number,
-    @Body() direccionDto: Partial<Direccion>,
+    @Body() direccionDto: Partial<DireccionPersona>,
   ) {
     return this.personaService.addDireccion(id, direccionDto);
   }
@@ -70,7 +73,7 @@ export class PersonaController {
   updateDireccion(
     @Param('id') id: number,
     @Param('direccionId') direccionId: number,
-    @Body() direccionDto: Partial<Direccion>,
+    @Body() direccionDto: Partial<DireccionPersona>,
   ) {
     return this.personaService.updateDireccion(id, direccionId, direccionDto);
   }

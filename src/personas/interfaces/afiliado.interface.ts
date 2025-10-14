@@ -1,4 +1,5 @@
 export interface Direccion {
+    id: number;
     calle: string;
     numero: string;
     depto?: string | null;
@@ -7,9 +8,20 @@ export interface Direccion {
 }
 
 export interface SituacionTerapeutica {
+    id: number;
     diagnostico: string | null;
     fechaInicio: string | null;
     fechaFin: string | null;
+}
+
+export interface GrupoFamiliar {
+    id: number;
+    credencial: string;
+    planMedico: string;
+    estado: string;
+    fechaAlta: string;
+    fechaBaja: string | null;
+    personas: Integrante[];
 }
 
 export interface Persona {

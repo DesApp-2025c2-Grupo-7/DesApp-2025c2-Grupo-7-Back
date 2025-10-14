@@ -8,7 +8,7 @@ import {
   Unique,
 } from 'typeorm';
 import { GrupoFamiliar } from './grupoFamiliar.entity';
-import { Direccion } from './direccionPersona.entity';
+import { DireccionPersona } from './direccionPersona.entity';
 import { SituacionTerapeutica } from './situacionTerapeutica.entity';
 
 @Entity('personas')
@@ -50,8 +50,8 @@ export class Persona {
   @Column({ nullable: true })
   parentesco?: string;
 
-  @OneToMany(() => Direccion, (direccion) => direccion.persona, { cascade: true, eager: true })
-  direccion: Direccion[];
+  @OneToMany(() => DireccionPersona, (direccion) => direccion.persona, { cascade: true, eager: true })
+  direccion: DireccionPersona[];
 
   @OneToMany(() => SituacionTerapeutica, (sit) => sit.persona, { cascade: true, eager: true })
   situacionesTerapeuticas?: SituacionTerapeutica[];

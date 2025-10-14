@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Persona } from './entities/persona.entity';
 import { GrupoFamiliar } from './entities/grupoFamiliar.entity';
-import { Direccion } from './entities/direccionPersona.entity';
+import { DireccionPersona } from './entities/direccionPersona.entity';
 import { SituacionTerapeutica } from './entities/situacionTerapeutica.entity';
 
 
@@ -13,7 +13,7 @@ export class PersonaService {
   constructor(
     @InjectRepository(Persona) private personaRepo: Repository<Persona>,
     @InjectRepository(GrupoFamiliar) private grupoRepo: Repository<GrupoFamiliar>,
-    @InjectRepository(Direccion) private direccionRepository: Repository<Direccion>,
+    @InjectRepository(DireccionPersona) private direccionRepository: Repository<DireccionPersona>,
     @InjectRepository(SituacionTerapeutica) private situacionRepo: Repository<SituacionTerapeutica>,
 
   ) { }
@@ -42,7 +42,7 @@ export class PersonaService {
     if (!persona) throw new NotFoundException(`No se encontró la persona con ID ${id}`);
 
     if (persona.tipoPersona === 'AFILIADO') {
-      // 👉 Si es titular, eliminamos todo el grupo familiar
+      // Si es AFILIADO, se da de baja al titular y a todos los integrantes del Grupo Familiar
       const personasRelacionadas = await this.personaRepo.find({
         where: { credencial: persona.credencial },
       });
@@ -54,7 +54,7 @@ export class PersonaService {
 
       await this.grupoRepo.delete({ credencial: persona.credencial });
     } else {
-      // 👉 Si es integrante, solo borramos esa persona
+      // Da de baja solo al integrante
       await this.personaRepo.delete(id);
     }
   }
@@ -121,9 +121,10 @@ export class PersonaService {
     } as Persona & { grupoFamiliar: Persona[] };
   }
 
-  // DIRECCION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!----------------------------------------------------------------------------------------
+  // CRUDs de DIRECCION de PERSONAS (AFILIADOS E INTEGRANTES)
+
   // ────────────── Agregar dirección a una persona ──────────────
-  async addDireccion(personaId: number, dto: Partial<Direccion>) {
+  async addDireccion(personaId: number, dto: Partial<DireccionPersona>) {
     const persona = await this.personaRepo.findOne({
       where: { id: personaId },
       relations: ['direccion'],
@@ -141,7 +142,7 @@ export class PersonaService {
   }
 
   // ────────────── Actualizar dirección ──────────────
-  async updateDireccion(personaId: number, direccionId: number, dto: Partial<Direccion>) {
+  async updateDireccion(personaId: number, direccionId: number, dto: Partial<DireccionPersona>) {
     const direccion = await this.direccionRepository.findOne({
       where: { id: direccionId, personaId },
     });
@@ -162,7 +163,7 @@ export class PersonaService {
     return { message: 'Dirección eliminada correctamente' };
   }
 
-  //SITUACION TERAPEUTICAA -----------------------------------------------------------------------------------------------------------------
+  // CRUDs de SITUACION TERAPEUTICA de PERSONA -----------------------------------------------------------------------------------------------------------------
   async addSituacionTerapeutica(
     personaId: number,
     dto: Partial<SituacionTerapeutica>,

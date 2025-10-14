@@ -6,10 +6,10 @@ import {
     OneToMany,
 } from 'typeorm';
 import { Prestador } from './prestador.entity';
-import { HorarioAtencion } from '../entities/horarioAtencion.entity';
+import { HorarioAtencion } from './horarioAtencion.entity';
 
 @Entity('direcciones')
-export class Direccion {
+export class DireccionPrestador {
     @PrimaryGeneratedColumn()
     id: number;
 

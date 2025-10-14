@@ -6,7 +6,7 @@ import {
     ManyToMany,
     JoinTable,
 } from 'typeorm';
-import { Direccion } from './direccion.entity';
+import { DireccionPrestador } from './direccionPrestador.entity';
 import { Especialidad } from '../../especialidades/entities/especialidades.entity';
 
 @Entity('prestadores')
@@ -33,6 +33,6 @@ export class Prestador {
     @Column({ type: 'json', nullable: true })
     email: string[];
 
-    @OneToMany(() => Direccion, (direccion) => direccion.prestador, { cascade: true, eager: true, onDelete: 'CASCADE',})
-    direccion: Direccion[];
+    @OneToMany(() => DireccionPrestador, (direccion) => direccion.prestador, { cascade: true, eager: true, onDelete: 'CASCADE',})
+    direccion: DireccionPrestador[];
 }

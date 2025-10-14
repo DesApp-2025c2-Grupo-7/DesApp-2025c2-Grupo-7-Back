@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Prestador } from '../prestadores/entities/prestador.entity';
-import { Direccion } from '../prestadores/entities/direccion.entity';
+import { DireccionPrestador } from './entities/direccionPrestador.entity';
 import { Especialidad } from '../especialidades/entities/especialidades.entity';
 import { HorarioAtencion } from './entities/horarioAtencion.entity';
 
@@ -13,8 +13,8 @@ export class PrestadoresService {
         private prestadorRepo: Repository<Prestador>,
         @InjectRepository(Especialidad)
         private especialidadRepo: Repository<Especialidad>,
-        @InjectRepository(Direccion)
-        private direccionRepo: Repository<Direccion>,
+        @InjectRepository(DireccionPrestador)
+        private direccionRepo: Repository<DireccionPrestador>,
         @InjectRepository(HorarioAtencion)
         private horarioRepo: Repository<HorarioAtencion>,
     ) { }
@@ -62,7 +62,7 @@ export class PrestadoresService {
 
 
     // ────────────── Obtener todas las direcciones de un prestador ──────────────
-    async getDirecciones(prestadorId: number): Promise<Direccion[]> {
+    async getDirecciones(prestadorId: number): Promise<DireccionPrestador[]> {
         const prestador = await this.prestadorRepo.findOne({
             where: { id: prestadorId },
             relations: ['direccion'],
@@ -72,7 +72,7 @@ export class PrestadoresService {
     }
 
     // ────────────── Agregar una dirección ──────────────
-    async addDireccion(prestadorId: number, dto: Partial<Direccion>): Promise<Direccion> {
+    async addDireccion(prestadorId: number, dto: Partial<DireccionPrestador>): Promise<DireccionPrestador> {
         const prestador = await this.prestadorRepo.findOne({ where: { id: prestadorId } });
         if (!prestador) throw new NotFoundException('Prestador no encontrado');
 
@@ -81,7 +81,7 @@ export class PrestadoresService {
     }
 
     // ────────────── Actualizar una dirección ──────────────
-    async updateDireccion(prestadorId: number, direccionId: number, dto: Partial<Direccion>): Promise<Direccion> {
+    async updateDireccion(prestadorId: number, direccionId: number, dto: Partial<DireccionPrestador>): Promise<DireccionPrestador> {
         const direccion = await this.direccionRepo.findOne({
             where: { id: direccionId, prestador: { id: prestadorId } },
             relations: ['prestador'],

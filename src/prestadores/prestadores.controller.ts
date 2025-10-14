@@ -1,8 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { PrestadoresService } from './prestadores.service';
-import { Direccion } from '../prestadores/entities/direccion.entity';
+import { DireccionPrestador } from './entities/direccionPrestador.entity';
 import type { Prestador } from './entities/prestador.entity';
 import { HorarioAtencion } from './entities/horarioAtencion.entity';
+
+
 @Controller('prestadores')
 export class PrestadoresController {
     constructor(private readonly service: PrestadoresService) { }
@@ -14,7 +16,7 @@ export class PrestadoresController {
     }
 
     @Post(':id/direcciones')
-    addDireccion(@Param('id') prestadorId: number, @Body() dto: Direccion) {
+    addDireccion(@Param('id') prestadorId: number, @Body() dto: DireccionPrestador) {
         return this.service.addDireccion(prestadorId, dto);
     }
 
@@ -22,7 +24,7 @@ export class PrestadoresController {
     updateDireccion(
         @Param('id') prestadorId: number,
         @Param('direccionId') direccionId: number,
-        @Body() dto: Partial<Direccion>,
+        @Body() dto: Partial<DireccionPrestador>,
     ) {
         return this.service.updateDireccion(prestadorId, direccionId, dto);
     }

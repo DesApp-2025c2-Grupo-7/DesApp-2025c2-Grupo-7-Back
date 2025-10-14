@@ -4,7 +4,7 @@ import {
     Column,
     ManyToOne,
 } from 'typeorm';
-import { Direccion } from './direccion.entity';
+import { DireccionPrestador } from './direccionPrestador.entity';
 
 @Entity('horarios_atencion')
 export class HorarioAtencion {
@@ -23,6 +23,6 @@ export class HorarioAtencion {
     @Column()
     duracionTurno: string;
 
-    @ManyToOne(() => Direccion, (d) => d.horariosAtencion, { onDelete: 'CASCADE' })
-    direccion: Direccion;
+    @ManyToOne(() => DireccionPrestador, (d) => d.horariosAtencion, { onDelete: 'CASCADE' })
+    direccion: DireccionPrestador;
 }
