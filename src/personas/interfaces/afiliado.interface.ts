@@ -32,6 +32,7 @@ export interface Afiliado extends Persona {
     sufijo: string;
     parentesco: string;
     grupoFamiliar: Integrante[];    
+    
 }export interface Integrante extends Persona {
     sufijo: string;
     parentesco: string;
