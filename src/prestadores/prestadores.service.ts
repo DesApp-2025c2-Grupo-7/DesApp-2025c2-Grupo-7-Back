@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Prestador } from '../prestadores/entities/prestador.entity';
 import { Direccion } from '../prestadores/entities/direccion.entity';
 import { Especialidad } from '../especialidades/entities/especialidades.entity';
+import { HorarioAtencion } from './entities/horarioAtencion.entity';
 
 @Injectable()
 export class PrestadoresService {
@@ -14,6 +15,8 @@ export class PrestadoresService {
         private especialidadRepo: Repository<Especialidad>,
         @InjectRepository(Direccion)
         private direccionRepo: Repository<Direccion>,
+        @InjectRepository(HorarioAtencion)
+        private horarioRepo: Repository<HorarioAtencion>,
     ) { }
 
     findAll(): Promise<Prestador[]> {
@@ -61,8 +64,8 @@ export class PrestadoresService {
     // ────────────── Obtener todas las direcciones de un prestador ──────────────
     async getDirecciones(prestadorId: number): Promise<Direccion[]> {
         const prestador = await this.prestadorRepo.findOne({
-        where: { id: prestadorId },
-        relations: ['direccion'],
+            where: { id: prestadorId },
+            relations: ['direccion'],
         });
         if (!prestador) throw new NotFoundException('Prestador no encontrado');
         return prestador.direccion;
@@ -80,8 +83,8 @@ export class PrestadoresService {
     // ────────────── Actualizar una dirección ──────────────
     async updateDireccion(prestadorId: number, direccionId: number, dto: Partial<Direccion>): Promise<Direccion> {
         const direccion = await this.direccionRepo.findOne({
-        where: { id: direccionId, prestador: { id: prestadorId } },
-        relations: ['prestador'],
+            where: { id: direccionId, prestador: { id: prestadorId } },
+            relations: ['prestador'],
         });
         if (!direccion) throw new NotFoundException('Dirección no encontrada o no pertenece al prestador');
 
@@ -92,11 +95,49 @@ export class PrestadoresService {
     // ────────────── Eliminar una dirección ──────────────
     async deleteDireccion(prestadorId: number, direccionId: number): Promise<void> {
         const direccion = await this.direccionRepo.findOne({
-        where: { id: direccionId, prestador: { id: prestadorId } },
+            where: { id: direccionId, prestador: { id: prestadorId } },
         });
         if (!direccion) throw new NotFoundException('Dirección no encontrada o no pertenece al prestador');
 
         await this.direccionRepo.delete(direccionId);
     }
+    // ------------------------------- Horarios ATENCION-------------------------------
+    // ────────────── CRUD de horarios de atención ──────────────
 
+    async getHorarios(direccionId: number): Promise<HorarioAtencion[]> {
+        const direccion = await this.direccionRepo.findOne({
+            where: { id: direccionId },
+            relations: ['horariosAtencion'],
+        });
+        if (!direccion) throw new NotFoundException('Dirección no encontrada');
+        return direccion.horariosAtencion;
+    }
+
+    async addHorario(direccionId: number, dto: Partial<HorarioAtencion>): Promise<HorarioAtencion> {
+        const direccion = await this.direccionRepo.findOne({ where: { id: direccionId } });
+        if (!direccion) throw new NotFoundException('Dirección no encontrada');
+
+        const nuevoHorario = this.horarioRepo.create({ ...dto, direccion });
+        return this.horarioRepo.save(nuevoHorario);
+    }
+
+    async updateHorario(direccionId: number, horarioId: number, dto: Partial<HorarioAtencion>): Promise<HorarioAtencion> {
+        const horario = await this.horarioRepo.findOne({
+            where: { id: horarioId, direccion: { id: direccionId } },
+            relations: ['direccion'],
+        });
+        if (!horario) throw new NotFoundException('Horario no encontrado o no pertenece a la dirección');
+
+        Object.assign(horario, dto);
+        return this.horarioRepo.save(horario);
+    }
+
+    async deleteHorario(direccionId: number, horarioId: number): Promise<void> {
+        const horario = await this.horarioRepo.findOne({
+            where: { id: horarioId, direccion: { id: direccionId } },
+        });
+        if (!horario) throw new NotFoundException('Horario no encontrado o no pertenece a la dirección');
+
+        await this.horarioRepo.delete(horarioId);
+    }
 }

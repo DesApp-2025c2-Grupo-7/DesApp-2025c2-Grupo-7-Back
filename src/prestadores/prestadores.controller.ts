@@ -2,10 +2,10 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/
 import { PrestadoresService } from './prestadores.service';
 import { Direccion } from '../prestadores/entities/direccion.entity';
 import type { Prestador } from './entities/prestador.entity';
-
+import { HorarioAtencion } from './entities/horarioAtencion.entity';
 @Controller('prestadores')
 export class PrestadoresController {
-    constructor(private readonly service: PrestadoresService) {}
+    constructor(private readonly service: PrestadoresService) { }
 
     // ────────────── Rutas CRUD direcciones ──────────────
     @Get(':id/direcciones')
@@ -45,10 +45,10 @@ export class PrestadoresController {
 
     @Post()
     create(@Body() body: Partial<Prestador>) {
-    const especialidadIds = Array.isArray((body as any).especialidadIds)
-        ? (body as any).especialidadIds
-        : [];
-    return this.service.create(body, especialidadIds);
+        const especialidadIds = Array.isArray((body as any).especialidadIds)
+            ? (body as any).especialidadIds
+            : [];
+        return this.service.create(body, especialidadIds);
     }
 
 
@@ -60,5 +60,31 @@ export class PrestadoresController {
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.service.remove(Number(id));
+    }
+    //----------------------------- HORARIOS ATENCION--------------------------------------------------
+    // ────────────── CRUD de horarios ──────────────
+
+    @Get(':id/direcciones/:direccionId/horarios')
+    getHorarios(@Param('direccionId') direccionId: number) {
+        return this.service.getHorarios(Number(direccionId));
+    }
+
+    @Post(':id/direcciones/:direccionId/horarios')
+    addHorario(@Param('direccionId') direccionId: number, @Body() dto: Partial<HorarioAtencion>) {
+        return this.service.addHorario(Number(direccionId), dto);
+    }
+
+    @Put(':id/direcciones/:direccionId/horarios/:horarioId')
+    updateHorario(
+        @Param('direccionId') direccionId: number,
+        @Param('horarioId') horarioId: number,
+        @Body() dto: Partial<HorarioAtencion>,
+    ) {
+        return this.service.updateHorario(Number(direccionId), Number(horarioId), dto);
+    }
+
+    @Delete(':id/direcciones/:direccionId/horarios/:horarioId')
+    deleteHorario(@Param('direccionId') direccionId: number, @Param('horarioId') horarioId: number) {
+        return this.service.deleteHorario(Number(direccionId), Number(horarioId));
     }
 }
