@@ -10,8 +10,10 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
-const afiliados_module_1 = require("./afiliados/afiliados.module");
+const persona_module_1 = require("./personas/persona.module");
 const prestadores_module_1 = require("./prestadores/prestadores.module");
+const especialidades_module_1 = require("./especialidades/especialidades.module");
+const path_1 = require("path");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -24,17 +26,19 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService],
                 useFactory: (config) => ({
                     type: 'postgres',
-                    host: config.get('DB_HOST') || 'localhost',
+                    host: config.get('DB_HOST'),
                     port: Number(config.get('DB_PORT') || 5432),
-                    username: config.get('DB_USERNAME'),
+                    username: config.get('DB_USER'),
                     password: config.get('DB_PASSWORD'),
-                    database: config.get('DB_DATABASE'),
-                    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+                    database: config.get('DB_NAME'),
+                    entities: [(0, path_1.join)(__dirname, '**', '*.entity{.ts,.js}')],
                     synchronize: true,
+                    ssl: config.get('DB_SSL') === 'true' ? { rejectUnauthorized: false } : false,
                 }),
             }),
-            afiliados_module_1.AfiliadosModule,
+            persona_module_1.PersonasModule,
             prestadores_module_1.PrestadoresModule,
+            especialidades_module_1.EspecialidadesModule,
         ],
         controllers: [],
         providers: [],

@@ -8,16 +8,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrestadoresModule = void 0;
 const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const prestador_entity_1 = require("./entities/prestador.entity");
+const especialidades_entity_1 = require("../especialidades/entities/especialidades.entity");
 const prestadores_service_1 = require("./prestadores.service");
 const prestadores_controller_1 = require("./prestadores.controller");
+const direccionPrestador_entity_1 = require("./entities/direccionPrestador.entity");
+const horarioAtencion_entity_1 = require("./entities/horarioAtencion.entity");
 let PrestadoresModule = class PrestadoresModule {
 };
 exports.PrestadoresModule = PrestadoresModule;
 exports.PrestadoresModule = PrestadoresModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
-        controllers: [prestadores_controller_1.PrestadoresController],
+        imports: [typeorm_1.TypeOrmModule.forFeature([prestador_entity_1.Prestador, especialidades_entity_1.Especialidad, direccionPrestador_entity_1.DireccionPrestador, horarioAtencion_entity_1.HorarioAtencion])],
         providers: [prestadores_service_1.PrestadoresService],
+        controllers: [prestadores_controller_1.PrestadoresController],
     })
 ], PrestadoresModule);
 //# sourceMappingURL=prestadores.module.js.map

@@ -7,8 +7,9 @@ async function bootstrap() {
         logger: ['error', 'warn'],
     });
     app.enableCors();
-    await app.listen(3000);
-    console.log('Backend corriendo en http://localhost:3000');
+    const port = process.env.PORT || 3000;
+    await app.listen(port);
+    console.log(`Backend corriendo en el puerto ${port}`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

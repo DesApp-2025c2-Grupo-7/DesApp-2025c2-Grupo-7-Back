@@ -1,5 +1,5 @@
 {
-  "name": "DesApp-2025c2-Grupo-7-Back",
+  "name": "desapp-2025c2-grupo-7-back",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -11,7 +11,6 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "seed": "ts-node src/especialidades/seed/seed-especialidades.ts",
-    "start:docker": "npm run seed && npm run start",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

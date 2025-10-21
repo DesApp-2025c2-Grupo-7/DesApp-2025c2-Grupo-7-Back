@@ -16,7 +16,7 @@ export interface Prestador {
     numeroCUIL: string;
     nombreCompleto: string;
     especialidades: string[];
-    tipoPrestacion: string;
+    esProfesionalIndependiente: boolean;
     telefono: string[];
     email: string[];
     direccion: Direccion[];
