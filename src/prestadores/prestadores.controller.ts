@@ -4,7 +4,6 @@ import { DireccionPrestador } from './entities/direccionPrestador.entity';
 import type { Prestador } from './entities/prestador.entity';
 import { HorarioAtencion } from './entities/horarioAtencion.entity';
 
-
 @Controller('prestadores')
 export class PrestadoresController {
     constructor(private readonly service: PrestadoresService) { }
@@ -53,7 +52,6 @@ export class PrestadoresController {
         return this.service.create(body, especialidadIds);
     }
 
-
     @Put(':id')
     update(@Param('id') id: string, @Body() body: Partial<Prestador> & { especialidadIds?: number[] }) {
         return this.service.update(Number(id), body, body.especialidadIds || []);
@@ -63,6 +61,7 @@ export class PrestadoresController {
     remove(@Param('id') id: string) {
         return this.service.remove(Number(id));
     }
+
     //----------------------------- HORARIOS ATENCION--------------------------------------------------
     // ────────────── CRUD de horarios ──────────────
 
@@ -72,7 +71,10 @@ export class PrestadoresController {
     }
 
     @Post(':id/direcciones/:direccionId/horarios')
-    addHorario(@Param('direccionId') direccionId: number, @Body() dto: Partial<HorarioAtencion>) {
+    addHorario(
+        @Param('direccionId') direccionId: number,
+        @Body() dto: Partial<HorarioAtencion> & { especialidadId?: number },
+    ) {
         return this.service.addHorario(Number(direccionId), dto);
     }
 
@@ -80,7 +82,7 @@ export class PrestadoresController {
     updateHorario(
         @Param('direccionId') direccionId: number,
         @Param('horarioId') horarioId: number,
-        @Body() dto: Partial<HorarioAtencion>,
+        @Body() dto: Partial<HorarioAtencion> & { especialidadId?: number },
     ) {
         return this.service.updateHorario(Number(direccionId), Number(horarioId), dto);
     }

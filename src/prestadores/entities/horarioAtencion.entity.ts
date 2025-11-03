@@ -5,6 +5,7 @@ import {
     ManyToOne,
 } from 'typeorm';
 import { DireccionPrestador } from './direccionPrestador.entity';
+import { Especialidad } from '../../especialidades/entities/especialidades.entity'; 
 
 @Entity('horarios_atencion')
 export class HorarioAtencion {
@@ -25,4 +26,7 @@ export class HorarioAtencion {
 
     @ManyToOne(() => DireccionPrestador, (d) => d.horariosAtencion, { onDelete: 'CASCADE' })
     direccion: DireccionPrestador;
+
+    @ManyToOne(() => Especialidad, { eager: true, nullable: true })
+    especialidad: Especialidad;
 }

@@ -60,8 +60,8 @@ export class PrestadoresService {
         await this.prestadorRepo.delete(id);
     }
 
+    // ────────────── Direcciones ──────────────
 
-    // ────────────── Obtener todas las direcciones de un prestador ──────────────
     async getDirecciones(prestadorId: number): Promise<DireccionPrestador[]> {
         const prestador = await this.prestadorRepo.findOne({
             where: { id: prestadorId },
@@ -71,7 +71,6 @@ export class PrestadoresService {
         return prestador.direccion;
     }
 
-    // ────────────── Agregar una dirección ──────────────
     async addDireccion(prestadorId: number, dto: Partial<DireccionPrestador>): Promise<DireccionPrestador> {
         const prestador = await this.prestadorRepo.findOne({ where: { id: prestadorId } });
         if (!prestador) throw new NotFoundException('Prestador no encontrado');
@@ -80,7 +79,6 @@ export class PrestadoresService {
         return this.direccionRepo.save(nuevaDireccion);
     }
 
-    // ────────────── Actualizar una dirección ──────────────
     async updateDireccion(prestadorId: number, direccionId: number, dto: Partial<DireccionPrestador>): Promise<DireccionPrestador> {
         const direccion = await this.direccionRepo.findOne({
             where: { id: direccionId, prestador: { id: prestadorId } },
@@ -92,7 +90,6 @@ export class PrestadoresService {
         return this.direccionRepo.save(direccion);
     }
 
-    // ────────────── Eliminar una dirección ──────────────
     async deleteDireccion(prestadorId: number, direccionId: number): Promise<void> {
         const direccion = await this.direccionRepo.findOne({
             where: { id: direccionId, prestador: { id: prestadorId } },
@@ -101,32 +98,57 @@ export class PrestadoresService {
 
         await this.direccionRepo.delete(direccionId);
     }
-    // ------------------------------- Horarios ATENCION-------------------------------
-    // ────────────── CRUD de horarios de atención ──────────────
+
+    // ────────────── Horarios con especialidad ──────────────
 
     async getHorarios(direccionId: number): Promise<HorarioAtencion[]> {
         const direccion = await this.direccionRepo.findOne({
             where: { id: direccionId },
-            relations: ['horariosAtencion'],
+            relations: ['horariosAtencion', 'horariosAtencion.especialidad'],
         });
         if (!direccion) throw new NotFoundException('Dirección no encontrada');
         return direccion.horariosAtencion;
     }
 
-    async addHorario(direccionId: number, dto: Partial<HorarioAtencion>): Promise<HorarioAtencion> {
+    async addHorario(
+        direccionId: number,
+        dto: Partial<HorarioAtencion> & { especialidadId?: number },
+    ): Promise<HorarioAtencion> {
         const direccion = await this.direccionRepo.findOne({ where: { id: direccionId } });
         if (!direccion) throw new NotFoundException('Dirección no encontrada');
 
-        const nuevoHorario = this.horarioRepo.create({ ...dto, direccion });
-        return this.horarioRepo.save(nuevoHorario);
+        let especialidad: Especialidad | undefined = undefined; 
+
+        if (dto.especialidadId) {
+            const found = await this.especialidadRepo.findOne({ where: { id: dto.especialidadId } });
+            if (!found) throw new NotFoundException('Especialidad no encontrada');
+            especialidad = found;
+        }
+        const nuevoHorario = this.horarioRepo.create({
+            ...dto,
+            direccion,
+            especialidad, 
+        });
+        return await this.horarioRepo.save(nuevoHorario);
     }
 
-    async updateHorario(direccionId: number, horarioId: number, dto: Partial<HorarioAtencion>): Promise<HorarioAtencion> {
+
+    async updateHorario(
+        direccionId: number,
+        horarioId: number,
+        dto: Partial<HorarioAtencion> & { especialidadId?: number },
+    ): Promise<HorarioAtencion> {
         const horario = await this.horarioRepo.findOne({
             where: { id: horarioId, direccion: { id: direccionId } },
-            relations: ['direccion'],
+            relations: ['direccion', 'especialidad'],
         });
         if (!horario) throw new NotFoundException('Horario no encontrado o no pertenece a la dirección');
+
+        if (dto.especialidadId) {
+            const especialidad = await this.especialidadRepo.findOne({ where: { id: dto.especialidadId } });
+            if (!especialidad) throw new NotFoundException('Especialidad no encontrada');
+            horario.especialidad = especialidad;
+        }
 
         Object.assign(horario, dto);
         return this.horarioRepo.save(horario);
