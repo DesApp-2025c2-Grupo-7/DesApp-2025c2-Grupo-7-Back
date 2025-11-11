@@ -100,7 +100,7 @@ let PrestadoresService = class PrestadoresService {
     async getHorarios(direccionId) {
         const direccion = await this.direccionRepo.findOne({
             where: { id: direccionId },
-            relations: ['horariosAtencion'],
+            relations: ['horariosAtencion', 'horariosAtencion.especialidad'],
         });
         if (!direccion)
             throw new common_1.NotFoundException('Dirección no encontrada');
@@ -110,16 +110,33 @@ let PrestadoresService = class PrestadoresService {
         const direccion = await this.direccionRepo.findOne({ where: { id: direccionId } });
         if (!direccion)
             throw new common_1.NotFoundException('Dirección no encontrada');
-        const nuevoHorario = this.horarioRepo.create({ ...dto, direccion });
-        return this.horarioRepo.save(nuevoHorario);
+        let especialidad = undefined;
+        if (dto.especialidadId) {
+            const found = await this.especialidadRepo.findOne({ where: { id: dto.especialidadId } });
+            if (!found)
+                throw new common_1.NotFoundException('Especialidad no encontrada');
+            especialidad = found;
+        }
+        const nuevoHorario = this.horarioRepo.create({
+            ...dto,
+            direccion,
+            especialidad,
+        });
+        return await this.horarioRepo.save(nuevoHorario);
     }
     async updateHorario(direccionId, horarioId, dto) {
         const horario = await this.horarioRepo.findOne({
             where: { id: horarioId, direccion: { id: direccionId } },
-            relations: ['direccion'],
+            relations: ['direccion', 'especialidad'],
         });
         if (!horario)
             throw new common_1.NotFoundException('Horario no encontrado o no pertenece a la dirección');
+        if (dto.especialidadId) {
+            const especialidad = await this.especialidadRepo.findOne({ where: { id: dto.especialidadId } });
+            if (!especialidad)
+                throw new common_1.NotFoundException('Especialidad no encontrada');
+            horario.especialidad = especialidad;
+        }
         Object.assign(horario, dto);
         return this.horarioRepo.save(horario);
     }

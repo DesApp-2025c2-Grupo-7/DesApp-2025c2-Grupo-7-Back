@@ -1,4 +1,5 @@
 import { DireccionPrestador } from './direccionPrestador.entity';
+import { Especialidad } from '../../especialidades/entities/especialidades.entity';
 export declare class HorarioAtencion {
     id: number;
     dia: string;
@@ -6,4 +7,5 @@ export declare class HorarioAtencion {
     hasta: string;
     duracionTurno: string;
     direccion: DireccionPrestador;
+    especialidad: Especialidad;
 }

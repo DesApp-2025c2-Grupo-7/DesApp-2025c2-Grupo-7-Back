@@ -19,7 +19,11 @@ export declare class PrestadoresService {
     updateDireccion(prestadorId: number, direccionId: number, dto: Partial<DireccionPrestador>): Promise<DireccionPrestador>;
     deleteDireccion(prestadorId: number, direccionId: number): Promise<void>;
     getHorarios(direccionId: number): Promise<HorarioAtencion[]>;
-    addHorario(direccionId: number, dto: Partial<HorarioAtencion>): Promise<HorarioAtencion>;
-    updateHorario(direccionId: number, horarioId: number, dto: Partial<HorarioAtencion>): Promise<HorarioAtencion>;
+    addHorario(direccionId: number, dto: Partial<HorarioAtencion> & {
+        especialidadId?: number;
+    }): Promise<HorarioAtencion>;
+    updateHorario(direccionId: number, horarioId: number, dto: Partial<HorarioAtencion> & {
+        especialidadId?: number;
+    }): Promise<HorarioAtencion>;
     deleteHorario(direccionId: number, horarioId: number): Promise<void>;
 }

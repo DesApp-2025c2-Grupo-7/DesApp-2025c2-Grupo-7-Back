@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HorarioAtencion = void 0;
 const typeorm_1 = require("typeorm");
 const direccionPrestador_entity_1 = require("./direccionPrestador.entity");
+const especialidades_entity_1 = require("../../especialidades/entities/especialidades.entity");
 let HorarioAtencion = class HorarioAtencion {
     id;
     dia;
@@ -19,6 +20,7 @@ let HorarioAtencion = class HorarioAtencion {
     hasta;
     duracionTurno;
     direccion;
+    especialidad;
 };
 exports.HorarioAtencion = HorarioAtencion;
 __decorate([
@@ -45,6 +47,10 @@ __decorate([
     (0, typeorm_1.ManyToOne)(() => direccionPrestador_entity_1.DireccionPrestador, (d) => d.horariosAtencion, { onDelete: 'CASCADE' }),
     __metadata("design:type", direccionPrestador_entity_1.DireccionPrestador)
 ], HorarioAtencion.prototype, "direccion", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => especialidades_entity_1.Especialidad, { eager: true, nullable: true }),
+    __metadata("design:type", especialidades_entity_1.Especialidad)
+], HorarioAtencion.prototype, "especialidad", void 0);
 exports.HorarioAtencion = HorarioAtencion = __decorate([
     (0, typeorm_1.Entity)('horarios_atencion')
 ], HorarioAtencion);
