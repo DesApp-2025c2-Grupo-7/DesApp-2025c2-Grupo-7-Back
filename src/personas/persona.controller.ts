@@ -24,7 +24,7 @@ export class PersonaController {
   // ────────────── Crear un afiliado ──────────────
   @Post()
   create(@Body() dto: Partial<Persona>): Promise<Persona> {
-    return this.personaService.create(dto);
+    return this.personaService.createPersona(dto);
   }
 
   // ────────────── Actualizar un afiliado o integrante ──────────────

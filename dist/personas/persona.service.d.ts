@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Persona } from './entities/persona.entity';
 import { GrupoFamiliar } from './entities/grupoFamiliar.entity';
 import { DireccionPersona } from './entities/direccionPersona.entity';
@@ -8,10 +8,11 @@ export declare class PersonaService {
     private grupoRepo;
     private direccionRepository;
     private situacionRepo;
-    constructor(personaRepo: Repository<Persona>, grupoRepo: Repository<GrupoFamiliar>, direccionRepository: Repository<DireccionPersona>, situacionRepo: Repository<SituacionTerapeutica>);
+    private readonly dataSource;
+    constructor(personaRepo: Repository<Persona>, grupoRepo: Repository<GrupoFamiliar>, direccionRepository: Repository<DireccionPersona>, situacionRepo: Repository<SituacionTerapeutica>, dataSource: DataSource);
     findAll(): Promise<Persona[]>;
     findOne(id: number): Promise<Persona>;
-    create(dto: Partial<Persona>): Promise<Persona>;
+    createPersona(dto: Partial<Persona>): Promise<Persona>;
     update(id: number, dto: Partial<Persona>): Promise<Persona>;
     remove(id: number): Promise<void>;
     addIntegrante(afiliadoId: number, integranteDto: Partial<Persona>): Promise<Persona>;

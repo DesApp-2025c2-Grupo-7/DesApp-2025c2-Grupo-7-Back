@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Persona } from './entities/persona.entity';
 import { GrupoFamiliar } from './entities/grupoFamiliar.entity';
 import { DireccionPersona } from './entities/direccionPersona.entity';
@@ -15,7 +15,7 @@ export class PersonaService {
     @InjectRepository(GrupoFamiliar) private grupoRepo: Repository<GrupoFamiliar>,
     @InjectRepository(DireccionPersona) private direccionRepository: Repository<DireccionPersona>,
     @InjectRepository(SituacionTerapeutica) private situacionRepo: Repository<SituacionTerapeutica>,
-
+    private readonly dataSource: DataSource,
   ) { }
 
   findAll(): Promise<Persona[]> {
@@ -26,9 +26,96 @@ export class PersonaService {
     return this.findAfiliadoById(id);
   }
 
-  create(dto: Partial<Persona>): Promise<Persona> {
-    return this.createAfiliado(dto);
+  async createPersona(dto: Partial<Persona>): Promise<Persona> {
+    return this.dataSource.transaction(async (manager) => {
+      const personaRepo = manager.getRepository(Persona);
+      const grupoRepo = manager.getRepository(GrupoFamiliar);
+
+      // 🔥 VALIDACIÓN NUEVA
+      if (dto.tipoPersona === 'AFILIADO' && !dto.planMedico) {
+        throw new Error('El planMedico es obligatorio para crear un afiliado, ya que define el plan del grupo familiar.');
+      }
+
+      if (dto.tipoPersona === 'AFILIADO') {
+        // 1. Obtener último grupo familiar para generar la siguiente credencial
+        const lastGrupo = await grupoRepo
+          .createQueryBuilder('g')
+          .orderBy('g.credencial', 'DESC')
+          .getOne();
+
+        let nextCredencialNumber: string;
+
+        if (!lastGrupo) {
+          // Primera credencial del sistema
+          nextCredencialNumber = '000001';
+        } else {
+          const nextNumber = (parseInt(lastGrupo.credencial, 10) + 1);
+          nextCredencialNumber = nextNumber.toString().padStart(6, '0');
+        }
+
+        // 2. Crear nuevo grupo familiar
+        const nuevoGrupo = grupoRepo.create({
+          credencial: nextCredencialNumber,
+          planMedico: dto.planMedico,
+          estado: 'Activo',
+          fechaAlta: new Date().toISOString().split('T')[0],
+          fechaBaja: null,
+        });
+
+        // ✅ Guardar grupo familiar primero
+        await grupoRepo.save(nuevoGrupo);
+
+        // 3. Crear afiliado
+        const nuevaPersona = personaRepo.create({
+          ...dto,
+          credencial: nextCredencialNumber,
+          sufijo: '01', // ✅ Primer miembro siempre "01"
+          grupoFamiliarId: nextCredencialNumber, // ✅ Vinculación del afiliado al grupo familiar
+          fechaAlta: new Date().toISOString().split('T')[0],
+        });
+
+        return personaRepo.save(nuevaPersona);
+      }
+
+      if (dto.tipoPersona === 'INTEGRANTE') {
+        if (!dto.grupoFamiliarId) {
+          throw new Error('grupoFamiliarId es obligatorio para un integrante.');
+        }
+
+        // 1. Verificar que el grupo exista
+        const grupo = await grupoRepo.findOne({
+          where: { credencial: dto.grupoFamiliarId },
+          relations: ['personas'],
+        });
+
+        if (!grupo) {
+          throw new Error(`No existe grupo familiar con credencial ${dto.grupoFamiliarId}`);
+        }
+
+        // 2. Calcular el siguiente sufijo
+        const sufijos = grupo.personas.map((p) => parseInt(p.sufijo, 10));
+        const nextSufijo = (Math.max(...sufijos) + 1).toString().padStart(2, '0');
+
+        // ✅ Validación tope 99
+        if (parseInt(nextSufijo, 10) > 99) {
+          throw new Error('No se pueden agregar más integrantes a este grupo familiar (límite 99).');
+        }
+
+        // 3. Crear integrante
+        const nuevaPersona = personaRepo.create({
+          ...dto,
+          credencial: dto.grupoFamiliarId,
+          sufijo: nextSufijo,
+          fechaAlta: new Date().toISOString().split('T')[0],
+        });
+
+        return personaRepo.save(nuevaPersona);
+      }
+
+      throw new Error('tipoPersona debe ser AFILIADO o INTEGRANTE');
+    });
   }
+
 
   async update(id: number, dto: Partial<Persona>): Promise<Persona> {
     await this.personaRepo.update(id, dto);

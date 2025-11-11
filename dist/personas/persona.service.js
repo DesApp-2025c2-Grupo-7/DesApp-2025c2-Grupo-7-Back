@@ -25,11 +25,13 @@ let PersonaService = class PersonaService {
     grupoRepo;
     direccionRepository;
     situacionRepo;
-    constructor(personaRepo, grupoRepo, direccionRepository, situacionRepo) {
+    dataSource;
+    constructor(personaRepo, grupoRepo, direccionRepository, situacionRepo, dataSource) {
         this.personaRepo = personaRepo;
         this.grupoRepo = grupoRepo;
         this.direccionRepository = direccionRepository;
         this.situacionRepo = situacionRepo;
+        this.dataSource = dataSource;
     }
     findAll() {
         return this.findAllAfiliados();
@@ -37,8 +39,69 @@ let PersonaService = class PersonaService {
     findOne(id) {
         return this.findAfiliadoById(id);
     }
-    create(dto) {
-        return this.createAfiliado(dto);
+    async createPersona(dto) {
+        return this.dataSource.transaction(async (manager) => {
+            const personaRepo = manager.getRepository(persona_entity_1.Persona);
+            const grupoRepo = manager.getRepository(grupoFamiliar_entity_1.GrupoFamiliar);
+            if (dto.tipoPersona === 'AFILIADO' && !dto.planMedico) {
+                throw new Error('El planMedico es obligatorio para crear un afiliado, ya que define el plan del grupo familiar.');
+            }
+            if (dto.tipoPersona === 'AFILIADO') {
+                const lastGrupo = await grupoRepo
+                    .createQueryBuilder('g')
+                    .orderBy('g.credencial', 'DESC')
+                    .getOne();
+                let nextCredencialNumber;
+                if (!lastGrupo) {
+                    nextCredencialNumber = '000001';
+                }
+                else {
+                    const nextNumber = (parseInt(lastGrupo.credencial, 10) + 1);
+                    nextCredencialNumber = nextNumber.toString().padStart(6, '0');
+                }
+                const nuevoGrupo = grupoRepo.create({
+                    credencial: nextCredencialNumber,
+                    planMedico: dto.planMedico,
+                    estado: 'Activo',
+                    fechaAlta: new Date().toISOString().split('T')[0],
+                    fechaBaja: null,
+                });
+                await grupoRepo.save(nuevoGrupo);
+                const nuevaPersona = personaRepo.create({
+                    ...dto,
+                    credencial: nextCredencialNumber,
+                    sufijo: '01',
+                    grupoFamiliarId: nextCredencialNumber,
+                    fechaAlta: new Date().toISOString().split('T')[0],
+                });
+                return personaRepo.save(nuevaPersona);
+            }
+            if (dto.tipoPersona === 'INTEGRANTE') {
+                if (!dto.grupoFamiliarId) {
+                    throw new Error('grupoFamiliarId es obligatorio para un integrante.');
+                }
+                const grupo = await grupoRepo.findOne({
+                    where: { credencial: dto.grupoFamiliarId },
+                    relations: ['personas'],
+                });
+                if (!grupo) {
+                    throw new Error(`No existe grupo familiar con credencial ${dto.grupoFamiliarId}`);
+                }
+                const sufijos = grupo.personas.map((p) => parseInt(p.sufijo, 10));
+                const nextSufijo = (Math.max(...sufijos) + 1).toString().padStart(2, '0');
+                if (parseInt(nextSufijo, 10) > 99) {
+                    throw new Error('No se pueden agregar más integrantes a este grupo familiar (límite 99).');
+                }
+                const nuevaPersona = personaRepo.create({
+                    ...dto,
+                    credencial: dto.grupoFamiliarId,
+                    sufijo: nextSufijo,
+                    fechaAlta: new Date().toISOString().split('T')[0],
+                });
+                return personaRepo.save(nuevaPersona);
+            }
+            throw new Error('tipoPersona debe ser AFILIADO o INTEGRANTE');
+        });
     }
     async update(id, dto) {
         await this.personaRepo.update(id, dto);
@@ -187,6 +250,7 @@ exports.PersonaService = PersonaService = __decorate([
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
-        typeorm_2.Repository])
+        typeorm_2.Repository,
+        typeorm_2.DataSource])
 ], PersonaService);
 //# sourceMappingURL=persona.service.js.map

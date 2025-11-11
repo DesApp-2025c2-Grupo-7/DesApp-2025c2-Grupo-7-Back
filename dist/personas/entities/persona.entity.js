@@ -41,11 +41,11 @@ __decorate([
     __metadata("design:type", Number)
 ], Persona.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ length: 50 }),
+    (0, typeorm_1.Column)({ length: 10 }),
     __metadata("design:type", String)
 ], Persona.prototype, "credencial", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ length: 10 }),
+    (0, typeorm_1.Column)({ length: 2 }),
     __metadata("design:type", String)
 ], Persona.prototype, "sufijo", void 0);
 __decorate([

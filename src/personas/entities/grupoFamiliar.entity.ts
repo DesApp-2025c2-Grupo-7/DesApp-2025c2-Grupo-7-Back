@@ -1,9 +1,12 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Persona } from './persona.entity';
 
 @Entity('grupos_familiares')
 export class GrupoFamiliar {
-  @PrimaryColumn({ length: 50 })
+  @PrimaryGeneratedColumn()
+  id: number; // ID interno autoincremental
+
+  @Column({ length: 50, unique: true })
   credencial: string;
 
   @Column({ length: 50 })

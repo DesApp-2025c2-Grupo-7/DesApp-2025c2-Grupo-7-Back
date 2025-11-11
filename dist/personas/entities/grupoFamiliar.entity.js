@@ -13,6 +13,7 @@ exports.GrupoFamiliar = void 0;
 const typeorm_1 = require("typeorm");
 const persona_entity_1 = require("./persona.entity");
 let GrupoFamiliar = class GrupoFamiliar {
+    id;
     credencial;
     planMedico;
     estado;
@@ -22,7 +23,11 @@ let GrupoFamiliar = class GrupoFamiliar {
 };
 exports.GrupoFamiliar = GrupoFamiliar;
 __decorate([
-    (0, typeorm_1.PrimaryColumn)({ length: 50 }),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
+], GrupoFamiliar.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ length: 50, unique: true }),
     __metadata("design:type", String)
 ], GrupoFamiliar.prototype, "credencial", void 0);
 __decorate([

@@ -17,10 +17,10 @@ export class Persona {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
+  @Column({ length: 10 })
   credencial: string;
 
-  @Column({ length: 10 })
+  @Column({ length: 2 })
   sufijo: string;
 
   @Column({ type: 'enum', enum: ['AFILIADO', 'INTEGRANTE'] })
