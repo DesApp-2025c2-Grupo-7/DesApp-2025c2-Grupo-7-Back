@@ -14,7 +14,7 @@ import { join } from 'path';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        host: config.get<string>('DB_HOST'),
+        host: config.get<string>('DB_HOST') || 'db',
         port: Number(config.get<number>('DB_PORT') || 5432),
         username: config.get<string>('DB_USER'),
         password: config.get<string>('DB_PASSWORD'),

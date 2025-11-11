@@ -34,5 +34,20 @@ services:
       - /app/node_modules
     command: sh -c "npm run seed && npm run start:dev"
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: desapp_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '8080:80'
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
 volumes:
   postgres_data:
+  pgadmin_data:
