@@ -22,6 +22,8 @@ let Prestador = class Prestador {
     telefono;
     email;
     direccion;
+    profesionales;
+    centrosMedicos;
 };
 exports.Prestador = Prestador;
 __decorate([
@@ -57,6 +59,19 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => direccionPrestador_entity_1.DireccionPrestador, (direccion) => direccion.prestador, { cascade: true, eager: true, onDelete: 'CASCADE', }),
     __metadata("design:type", Array)
 ], Prestador.prototype, "direccion", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => Prestador, (prestador) => prestador.centrosMedicos),
+    (0, typeorm_1.JoinTable)({
+        name: 'centro_profesionales',
+        joinColumn: { name: 'centro_id', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'profesional_id', referencedColumnName: 'id' },
+    }),
+    __metadata("design:type", Array)
+], Prestador.prototype, "profesionales", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => Prestador, (prestador) => prestador.profesionales),
+    __metadata("design:type", Array)
+], Prestador.prototype, "centrosMedicos", void 0);
 exports.Prestador = Prestador = __decorate([
     (0, typeorm_1.Entity)('prestadores')
 ], Prestador);

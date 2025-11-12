@@ -148,6 +148,64 @@ let PrestadoresService = class PrestadoresService {
             throw new common_1.NotFoundException('Horario no encontrado o no pertenece a la dirección');
         await this.horarioRepo.delete(horarioId);
     }
+    async getProfesionalesIndependientes(centroMedicoId) {
+        const centroMedico = await this.prestadorRepo.findOne({
+            where: { id: centroMedicoId },
+            relations: ['profesionales', 'profesionales.especialidades'],
+        });
+        if (!centroMedico) {
+            throw new common_1.NotFoundException(`Centro médico ${centroMedicoId} no encontrado`);
+        }
+        if (centroMedico.esProfesionalIndependiente) {
+            throw new common_1.BadRequestException('Este prestador es un profesional independiente, no puede tener profesionales asociados');
+        }
+        return centroMedico.profesionales;
+    }
+    async agregarProfesionalIndependiente(centroMedicoId, profesionalId) {
+        const centroMedico = await this.prestadorRepo.findOne({
+            where: { id: centroMedicoId },
+            relations: ['profesionales'],
+        });
+        if (!centroMedico) {
+            throw new common_1.NotFoundException(`Centro médico ${centroMedicoId} no encontrado`);
+        }
+        if (centroMedico.esProfesionalIndependiente) {
+            throw new common_1.BadRequestException('Este prestador es un profesional independiente, no puede tener profesionales asociados');
+        }
+        const profesional = await this.prestadorRepo.findOne({
+            where: { id: profesionalId },
+        });
+        if (!profesional) {
+            throw new common_1.NotFoundException(`Profesional ${profesionalId} no encontrado`);
+        }
+        if (!profesional.esProfesionalIndependiente) {
+            throw new common_1.BadRequestException('Solo se pueden agregar profesionales independientes a un centro médico');
+        }
+        const yaExiste = centroMedico.profesionales.some(p => p.id === profesionalId);
+        if (yaExiste) {
+            throw new common_1.BadRequestException('Este profesional ya está asociado al centro médico');
+        }
+        centroMedico.profesionales.push(profesional);
+        return await this.prestadorRepo.save(centroMedico);
+    }
+    async eliminarProfesionalIndependiente(centroMedicoId, profesionalId) {
+        const centroMedico = await this.prestadorRepo.findOne({
+            where: { id: centroMedicoId },
+            relations: ['profesionales'],
+        });
+        if (!centroMedico) {
+            throw new common_1.NotFoundException(`Centro médico ${centroMedicoId} no encontrado`);
+        }
+        if (centroMedico.esProfesionalIndependiente) {
+            throw new common_1.BadRequestException('Este prestador es un profesional independiente, no puede tener profesionales asociados');
+        }
+        const profesionalIndex = centroMedico.profesionales.findIndex(p => p.id === profesionalId);
+        if (profesionalIndex === -1) {
+            throw new common_1.NotFoundException('El profesional no está asociado a este centro médico');
+        }
+        centroMedico.profesionales.splice(profesionalIndex, 1);
+        await this.prestadorRepo.save(centroMedico);
+    }
 };
 exports.PrestadoresService = PrestadoresService;
 exports.PrestadoresService = PrestadoresService = __decorate([

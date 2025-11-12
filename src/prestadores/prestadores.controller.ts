@@ -91,4 +91,33 @@ export class PrestadoresController {
     deleteHorario(@Param('direccionId') direccionId: number, @Param('horarioId') horarioId: number) {
         return this.service.deleteHorario(Number(direccionId), Number(horarioId));
     }
+
+    // ────────────── Profesionales de Centro Médico ──────────────
+
+    @Get(':id/profesionales')
+    getProfesionalesIndependientes(@Param('id') centroMedicoId: number) {
+        return this.service.getProfesionalesIndependientes(Number(centroMedicoId));
+    }
+
+    @Post(':id/profesionales/:profesionalId')
+    agregarProfesionalIndependiente(
+        @Param('id') centroMedicoId: number,
+        @Param('profesionalId') profesionalId: number,
+    ) {
+        return this.service.agregarProfesionalIndependiente(
+            Number(centroMedicoId),
+            Number(profesionalId),
+        );
+    }
+
+    @Delete(':id/profesionales/:profesionalId')
+    eliminarProfesionalIndependiente(
+        @Param('id') centroMedicoId: number,
+        @Param('profesionalId') profesionalId: number,
+    ) {
+        return this.service.eliminarProfesionalIndependiente(
+            Number(centroMedicoId),
+            Number(profesionalId),
+        );
+    }
 }

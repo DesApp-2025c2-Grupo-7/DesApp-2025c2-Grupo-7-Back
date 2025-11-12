@@ -25,6 +25,12 @@ export class DireccionPrestador {
     @Column()
     codigoPostal: string;
 
+    @Column({ default: false })
+    esDireccionCentroMedico: boolean;
+    
+    @Column({ nullable: true })
+    centroMedicoId: number; // Referencia al centro que creó esta dirección
+
     @ManyToOne(() => Prestador, (p) => p.direccion, { onDelete: 'CASCADE' })
     prestador: Prestador;
 

@@ -85,6 +85,7 @@ let PersonaService = class PersonaService {
             sufijo: nextSufijo,
             grupoFamiliar: afiliado.grupoFamiliar,
             planMedico: afiliado.planMedico,
+            fechaAlta: new Date().toISOString().split('T')[0],
         });
         return this.personaRepo.save(integrante);
     }
@@ -127,6 +128,7 @@ let PersonaService = class PersonaService {
             credencial: nextCredencial,
             sufijo: '01',
             grupoFamiliar: grupo,
+            fechaAlta: dto.fechaAlta || new Date().toISOString().split('T')[0],
         });
         return this.personaRepo.save(afiliado);
     }

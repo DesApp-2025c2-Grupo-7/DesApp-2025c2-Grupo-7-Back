@@ -63,6 +63,15 @@ let PrestadoresController = class PrestadoresController {
     deleteHorario(direccionId, horarioId) {
         return this.service.deleteHorario(Number(direccionId), Number(horarioId));
     }
+    getProfesionalesIndependientes(centroMedicoId) {
+        return this.service.getProfesionalesIndependientes(Number(centroMedicoId));
+    }
+    agregarProfesionalIndependiente(centroMedicoId, profesionalId) {
+        return this.service.agregarProfesionalIndependiente(Number(centroMedicoId), Number(profesionalId));
+    }
+    eliminarProfesionalIndependiente(centroMedicoId, profesionalId) {
+        return this.service.eliminarProfesionalIndependiente(Number(centroMedicoId), Number(profesionalId));
+    }
 };
 exports.PrestadoresController = PrestadoresController;
 __decorate([
@@ -164,6 +173,29 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", void 0)
 ], PrestadoresController.prototype, "deleteHorario", null);
+__decorate([
+    (0, common_1.Get)(':id/profesionales'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], PrestadoresController.prototype, "getProfesionalesIndependientes", null);
+__decorate([
+    (0, common_1.Post)(':id/profesionales/:profesionalId'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Param)('profesionalId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:returntype", void 0)
+], PrestadoresController.prototype, "agregarProfesionalIndependiente", null);
+__decorate([
+    (0, common_1.Delete)(':id/profesionales/:profesionalId'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Param)('profesionalId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:returntype", void 0)
+], PrestadoresController.prototype, "eliminarProfesionalIndependiente", null);
 exports.PrestadoresController = PrestadoresController = __decorate([
     (0, common_1.Controller)('prestadores'),
     __metadata("design:paramtypes", [prestadores_service_1.PrestadoresService])

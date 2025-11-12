@@ -26,4 +26,7 @@ export declare class PrestadoresService {
         especialidadId?: number;
     }): Promise<HorarioAtencion>;
     deleteHorario(direccionId: number, horarioId: number): Promise<void>;
+    getProfesionalesIndependientes(centroMedicoId: number): Promise<Prestador[]>;
+    agregarProfesionalIndependiente(centroMedicoId: number, profesionalId: number): Promise<Prestador>;
+    eliminarProfesionalIndependiente(centroMedicoId: number, profesionalId: number): Promise<void>;
 }

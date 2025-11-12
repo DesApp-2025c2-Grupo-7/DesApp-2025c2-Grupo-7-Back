@@ -9,4 +9,6 @@ export declare class Prestador {
     telefono: string[];
     email: string[];
     direccion: DireccionPrestador[];
+    profesionales: Prestador[];
+    centrosMedicos: Prestador[];
 }
