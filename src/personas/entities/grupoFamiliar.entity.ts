@@ -4,7 +4,7 @@ import { Persona } from './persona.entity';
 @Entity('grupos_familiares')
 export class GrupoFamiliar {
   @PrimaryGeneratedColumn()
-  id: number; // ID interno autoincremental
+  id: number; 
 
   @Column({ length: 50, unique: true })
   credencial: string;
@@ -24,3 +24,5 @@ export class GrupoFamiliar {
   @OneToMany(() => Persona, (persona) => persona.grupoFamiliar, { eager: true })
   personas: Persona[];
 }
+
+

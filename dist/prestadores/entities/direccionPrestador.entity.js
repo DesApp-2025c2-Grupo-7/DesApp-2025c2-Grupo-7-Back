@@ -19,6 +19,8 @@ let DireccionPrestador = class DireccionPrestador {
     numero;
     localidad;
     codigoPostal;
+    esDireccionCentroMedico;
+    centroMedicoId;
     prestador;
     horariosAtencion;
 };
@@ -43,6 +45,14 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], DireccionPrestador.prototype, "codigoPostal", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], DireccionPrestador.prototype, "esDireccionCentroMedico", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], DireccionPrestador.prototype, "centroMedicoId", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => prestador_entity_1.Prestador, (p) => p.direccion, { onDelete: 'CASCADE' }),
     __metadata("design:type", prestador_entity_1.Prestador)

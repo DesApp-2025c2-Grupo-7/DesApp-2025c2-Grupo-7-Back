@@ -33,6 +33,12 @@ export class Prestador {
     @Column({ type: 'json', nullable: true })
     email: string[];
 
+    @Column({ type: 'date' })
+    fechaAlta: string;
+
+    @Column({ type: 'date', nullable: true })
+    fechaBaja: string | null;
+
     @OneToMany(() => DireccionPrestador, (direccion) => direccion.prestador, { cascade: true, eager: true, onDelete: 'CASCADE',})
     direccion: DireccionPrestador[];
 

@@ -164,7 +164,7 @@ let PrestadoresService = class PrestadoresService {
     async agregarProfesionalIndependiente(centroMedicoId, profesionalId) {
         const centroMedico = await this.prestadorRepo.findOne({
             where: { id: centroMedicoId },
-            relations: ['profesionales'],
+            relations: ['profesionales', 'especialidades', 'direccion'],
         });
         if (!centroMedico) {
             throw new common_1.NotFoundException(`Centro médico ${centroMedicoId} no encontrado`);
@@ -174,6 +174,7 @@ let PrestadoresService = class PrestadoresService {
         }
         const profesional = await this.prestadorRepo.findOne({
             where: { id: profesionalId },
+            relations: ['especialidades', 'direccion'],
         });
         if (!profesional) {
             throw new common_1.NotFoundException(`Profesional ${profesionalId} no encontrado`);
@@ -181,9 +182,33 @@ let PrestadoresService = class PrestadoresService {
         if (!profesional.esProfesionalIndependiente) {
             throw new common_1.BadRequestException('Solo se pueden agregar profesionales independientes a un centro médico');
         }
+        const especialidadesCentro = centroMedico.especialidades.map(e => e.id);
+        const especialidadesProfesional = profesional.especialidades.map(e => e.id);
+        const tieneEspecialidadEnComun = especialidadesProfesional.some(espId => especialidadesCentro.includes(espId));
+        if (!tieneEspecialidadEnComun) {
+            throw new common_1.BadRequestException('El profesional debe tener al menos una especialidad en común con el centro médico');
+        }
         const yaExiste = centroMedico.profesionales.some(p => p.id === profesionalId);
         if (yaExiste) {
             throw new common_1.BadRequestException('Este profesional ya está asociado al centro médico');
+        }
+        for (const direccionCentro of centroMedico.direccion) {
+            const yaExisteDireccion = profesional.direccion.some(d => d.esDireccionCentroMedico &&
+                d.centroMedicoId === centroMedicoId &&
+                d.calle === direccionCentro.calle &&
+                d.numero === direccionCentro.numero);
+            if (!yaExisteDireccion) {
+                const nuevaDireccion = this.direccionRepo.create({
+                    calle: direccionCentro.calle,
+                    numero: direccionCentro.numero,
+                    localidad: direccionCentro.localidad,
+                    codigoPostal: direccionCentro.codigoPostal,
+                    esDireccionCentroMedico: true,
+                    centroMedicoId: centroMedicoId,
+                    prestador: profesional,
+                });
+                await this.direccionRepo.save(nuevaDireccion);
+            }
         }
         centroMedico.profesionales.push(profesional);
         return await this.prestadorRepo.save(centroMedico);
@@ -203,6 +228,11 @@ let PrestadoresService = class PrestadoresService {
         if (profesionalIndex === -1) {
             throw new common_1.NotFoundException('El profesional no está asociado a este centro médico');
         }
+        await this.direccionRepo.delete({
+            prestador: { id: profesionalId },
+            esDireccionCentroMedico: true,
+            centroMedicoId: centroMedicoId,
+        });
         centroMedico.profesionales.splice(profesionalIndex, 1);
         await this.prestadorRepo.save(centroMedico);
     }

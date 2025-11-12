@@ -6,6 +6,8 @@ export declare class DireccionPrestador {
     numero: string;
     localidad: string;
     codigoPostal: string;
+    esDireccionCentroMedico: boolean;
+    centroMedicoId: number;
     prestador: Prestador;
     horariosAtencion: HorarioAtencion[];
 }
