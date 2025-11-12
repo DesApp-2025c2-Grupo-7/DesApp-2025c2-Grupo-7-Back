@@ -12,7 +12,7 @@ export declare class PersonaService {
     constructor(personaRepo: Repository<Persona>, grupoRepo: Repository<GrupoFamiliar>, direccionRepository: Repository<DireccionPersona>, situacionRepo: Repository<SituacionTerapeutica>, dataSource: DataSource);
     findAll(): Promise<Persona[]>;
     findOne(id: number): Promise<Persona>;
-    createPersona(dto: Partial<Persona>): Promise<Persona>;
+    create(dto: Partial<Persona>): Promise<Persona>;
     update(id: number, dto: Partial<Persona>): Promise<Persona>;
     remove(id: number): Promise<void>;
     addIntegrante(afiliadoId: number, integranteDto: Partial<Persona>): Promise<Persona>;

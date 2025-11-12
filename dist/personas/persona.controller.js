@@ -27,7 +27,7 @@ let PersonaController = class PersonaController {
         return this.personaService.findOne(id);
     }
     create(dto) {
-        return this.personaService.createPersona(dto);
+        return this.personaService.create(dto);
     }
     update(id, dto) {
         return this.personaService.update(id, dto);
