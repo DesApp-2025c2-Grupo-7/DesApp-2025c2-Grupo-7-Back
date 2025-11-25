@@ -43,7 +43,22 @@ let PersonaService = class PersonaService {
         return this.createAfiliado(dto);
     }
     async update(id, dto) {
-        await this.personaRepo.update(id, dto);
+        const persona = await this.personaRepo.findOne({
+            where: { id }
+        });
+        if (!persona)
+            throw new common_1.NotFoundException(`Persona ${id} no encontrada`);
+        const { grupoFamiliar, direccion, situacionesTerapeuticas, credencial, sufijo, tipoPersona, grupoFamiliarId, id: dtoId, ...camposModificables } = dto;
+        if (persona.tipoPersona === 'AFILIADO' && camposModificables.planMedico) {
+            const resultGrupo = await this.grupoRepo.update({ credencial: persona.credencial }, { planMedico: camposModificables.planMedico });
+            const resultPersonas = await this.personaRepo
+                .createQueryBuilder()
+                .update(persona_entity_1.Persona)
+                .set({ planMedico: camposModificables.planMedico })
+                .where('credencial = :credencial', { credencial: persona.credencial })
+                .execute();
+        }
+        await this.personaRepo.update(id, camposModificables);
         const updated = await this.personaRepo.findOne({ where: { id } });
         if (!updated)
             throw new common_1.NotFoundException(`Persona ${id} no encontrada`);

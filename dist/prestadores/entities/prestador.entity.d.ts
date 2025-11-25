@@ -8,6 +8,8 @@ export declare class Prestador {
     esProfesionalIndependiente: boolean;
     telefono: string[];
     email: string[];
+    fechaAlta: string;
+    fechaBaja: string | null;
     direccion: DireccionPrestador[];
     profesionales: Prestador[];
     centrosMedicos: Prestador[];

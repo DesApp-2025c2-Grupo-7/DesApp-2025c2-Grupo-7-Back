@@ -21,6 +21,8 @@ let Prestador = class Prestador {
     esProfesionalIndependiente;
     telefono;
     email;
+    fechaAlta;
+    fechaBaja;
     direccion;
     profesionales;
     centrosMedicos;
@@ -55,6 +57,14 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'json', nullable: true }),
     __metadata("design:type", Array)
 ], Prestador.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'date' }),
+    __metadata("design:type", String)
+], Prestador.prototype, "fechaAlta", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'date', nullable: true }),
+    __metadata("design:type", Object)
+], Prestador.prototype, "fechaBaja", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => direccionPrestador_entity_1.DireccionPrestador, (direccion) => direccion.prestador, { cascade: true, eager: true, onDelete: 'CASCADE', }),
     __metadata("design:type", Array)

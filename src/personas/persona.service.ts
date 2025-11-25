@@ -29,9 +29,51 @@ export class PersonaService {
   create(dto: Partial<Persona>): Promise<Persona> {
     return this.createAfiliado(dto);
   }
-  
+    
   async update(id: number, dto: Partial<Persona>): Promise<Persona> {
-    await this.personaRepo.update(id, dto);
+    const persona = await this.personaRepo.findOne({ 
+      where: { id }
+    });
+    
+    if (!persona) throw new NotFoundException(`Persona ${id} no encontrada`);
+
+    // Extraer solo campos modificables
+    const { 
+      grupoFamiliar, 
+      direccion, 
+      situacionesTerapeuticas,
+      credencial,
+      sufijo,
+      tipoPersona,
+      grupoFamiliarId,
+      id: dtoId,
+      ...camposModificables 
+    } = dto as any;
+
+
+    // Si es AFILIADO y se está modificando el planMedico
+    if (persona.tipoPersona === 'AFILIADO' && camposModificables.planMedico) {
+     
+      
+      // 1. Actualizar el grupo familiar
+      const resultGrupo = await this.grupoRepo.update(
+        { credencial: persona.credencial },
+        { planMedico: camposModificables.planMedico }
+      );
+
+      
+      // 2. Actualizar TODAS las personas con esa credencial
+      const resultPersonas = await this.personaRepo
+        .createQueryBuilder()
+        .update(Persona)
+        .set({ planMedico: camposModificables.planMedico })
+        .where('credencial = :credencial', { credencial: persona.credencial })
+        .execute();
+    }
+    
+    // Actualizar la persona específica
+    await this.personaRepo.update(id, camposModificables);
+
     const updated = await this.personaRepo.findOne({ where: { id } });
     if (!updated) throw new NotFoundException(`Persona ${id} no encontrada`);
     return updated;
