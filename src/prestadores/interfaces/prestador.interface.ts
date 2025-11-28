@@ -9,6 +9,8 @@ export interface Direccion {
     calle: string;
     numero: string;
     localidad: string;
+    provincia: string;
+    departamento: string;
     codigoPostal: string;
     horariosAtencion: HorarioAtencion[];
 }

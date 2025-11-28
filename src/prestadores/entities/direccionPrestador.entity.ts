@@ -23,13 +23,19 @@ export class DireccionPrestador {
     localidad: string;
 
     @Column()
+    provincia: string; // ⬅️ NUEVO
+
+    @Column()
+    departamento: string; // ⬅️ NUEVO
+
+    @Column()
     codigoPostal: string;
 
     @Column({ default: false })
     esDireccionCentroMedico: boolean;
-    
+
     @Column({ nullable: true })
-    centroMedicoId: number; // Referencia al centro que creó esta dirección
+    centroMedicoId: number;
 
     @ManyToOne(() => Prestador, (p) => p.direccion, { onDelete: 'CASCADE' })
     prestador: Prestador;
