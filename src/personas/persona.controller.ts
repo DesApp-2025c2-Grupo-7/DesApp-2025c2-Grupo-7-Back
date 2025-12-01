@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
 import { PersonaService } from './persona.service';
 import { Persona } from './entities/persona.entity';
 import { DireccionPersona } from './entities/direccionPersona.entity';
@@ -13,6 +13,15 @@ export class PersonaController {
   @Get()
   findAll(): Promise<Persona[]> {
     return this.personaService.findAll();
+  }
+
+  // ────────────── Filtrar por fechaAlta y fechaBaja ──────────────
+  @Get('filtrar')
+  getByFechaAltaYBaja(
+    @Query('fechaDesde') fechaDesde: string,
+    @Query('fechaHasta') fechaHasta: string,
+  ) {
+    return this.personaService.getByFechaAltaYBaja(fechaDesde, fechaHasta);
   }
 
   // ────────────── Traer un afiliado por ID ──────────────
@@ -116,3 +125,14 @@ export class PersonaController {
   }
 
 }
+
+
+
+
+
+
+
+
+
+
+

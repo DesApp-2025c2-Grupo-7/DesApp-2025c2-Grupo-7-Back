@@ -1,10 +1,12 @@
-import { Injectable, NotFoundException} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Persona } from './entities/persona.entity';
 import { GrupoFamiliar } from './entities/grupoFamiliar.entity';
 import { DireccionPersona } from './entities/direccionPersona.entity';
 import { SituacionTerapeutica } from './entities/situacionTerapeutica.entity';
+import { Between, IsNull } from 'typeorm';
+
 
 
 
@@ -29,39 +31,39 @@ export class PersonaService {
   create(dto: Partial<Persona>): Promise<Persona> {
     return this.createAfiliado(dto);
   }
-    
+
   async update(id: number, dto: Partial<Persona>): Promise<Persona> {
-    const persona = await this.personaRepo.findOne({ 
+    const persona = await this.personaRepo.findOne({
       where: { id }
     });
-    
+
     if (!persona) throw new NotFoundException(`Persona ${id} no encontrada`);
 
     // Extraer solo campos modificables
-    const { 
-      grupoFamiliar, 
-      direccion, 
+    const {
+      grupoFamiliar,
+      direccion,
       situacionesTerapeuticas,
       credencial,
       sufijo,
       tipoPersona,
       grupoFamiliarId,
       id: dtoId,
-      ...camposModificables 
+      ...camposModificables
     } = dto as any;
 
 
     // Si es AFILIADO y se está modificando el planMedico
     if (persona.tipoPersona === 'AFILIADO' && camposModificables.planMedico) {
-     
-      
+
+
       // 1. Actualizar el grupo familiar
       const resultGrupo = await this.grupoRepo.update(
         { credencial: persona.credencial },
         { planMedico: camposModificables.planMedico }
       );
 
-      
+
       // 2. Actualizar TODAS las personas con esa credencial
       const resultPersonas = await this.personaRepo
         .createQueryBuilder()
@@ -70,7 +72,7 @@ export class PersonaService {
         .where('credencial = :credencial', { credencial: persona.credencial })
         .execute();
     }
-    
+
     // Actualizar la persona específica
     await this.personaRepo.update(id, camposModificables);
 
@@ -100,7 +102,7 @@ export class PersonaService {
       await this.personaRepo.delete(id);
     }
   }
-  
+
 
   // AGREGAR INTEGRANTE AL GRUPO FAMILIAR CON SUFIJO AUTOINCREMENTAL
 
@@ -285,4 +287,22 @@ export class PersonaService {
     await this.situacionRepo.remove(situacion);
     return { message: 'Situación terapéutica eliminada correctamente' };
   }
+
+  // ────────────── Filtrar afiliados por fechaAlta y fechaBaja ──────────────
+  async getByFechaAltaYBaja(fechaDesde: string, fechaHasta: string): Promise<Persona[]> {
+    return this.personaRepo.find({
+      where: [
+        // Coincide si fechaAlta está dentro del rango
+        { fechaAlta: Between(fechaDesde, fechaHasta) },
+
+        // O si fechaBaja está en rango
+        { fechaBaja: Between(fechaDesde, fechaHasta) },
+
+        // O si nunca tuvo fecha de baja y su alta está dentro del periodo
+        { fechaAlta: Between(fechaDesde, fechaHasta), fechaBaja: IsNull() },
+      ],
+      order: { fechaAlta: 'ASC', apellido: 'ASC' },
+    });
+  }
+
 }
