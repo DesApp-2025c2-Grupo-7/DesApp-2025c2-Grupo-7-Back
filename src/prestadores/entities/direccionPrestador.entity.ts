@@ -23,12 +23,6 @@ export class DireccionPrestador {
     localidad: string;
 
     @Column()
-    provincia: string; // ⬅️ NUEVO
-
-    @Column()
-    departamento: string; // ⬅️ NUEVO
-
-    @Column()
     codigoPostal: string;
 
     @Column({ default: false })

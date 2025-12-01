@@ -244,9 +244,7 @@ export class PrestadoresService {
                 const nuevaDireccion = this.direccionRepo.create({
                     calle: direccionCentro.calle,
                     numero: direccionCentro.numero,
-                    localidad: direccionCentro.localidad,
-                    provincia: direccionCentro.provincia,        
-                    departamento: direccionCentro.departamento,  
+                    localidad: direccionCentro.localidad, 
                     codigoPostal: direccionCentro.codigoPostal,
                     esDireccionCentroMedico: true,
                     centroMedicoId: centroMedicoId,
