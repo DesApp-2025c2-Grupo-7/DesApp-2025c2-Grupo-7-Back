@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query} from '@nestjs/common';
 import { PrestadoresService } from './prestadores.service';
 import { DireccionPrestador } from './entities/direccionPrestador.entity';
 import type { Prestador } from './entities/prestador.entity';
@@ -7,6 +7,16 @@ import { HorarioAtencion } from './entities/horarioAtencion.entity';
 @Controller('prestadores')
 export class PrestadoresController {
     constructor(private readonly service: PrestadoresService) { }
+
+    // ────────────── Filtrar Prestadores por fechas ──────────────
+    @Get('filtrar')
+    filtrarPorFechas(
+        @Query('fechaDesde') fechaDesde: string,
+        @Query('fechaHasta') fechaHasta: string,
+    ) {
+        return this.service.filtrarPorFechas(fechaDesde, fechaHasta);
+    }
+
 
     // ────────────── Rutas CRUD direcciones ──────────────
     @Get(':id/direcciones')

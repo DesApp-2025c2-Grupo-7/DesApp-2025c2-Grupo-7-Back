@@ -5,6 +5,7 @@ import { Prestador } from '../prestadores/entities/prestador.entity';
 import { DireccionPrestador } from './entities/direccionPrestador.entity';
 import { Especialidad } from '../especialidades/entities/especialidades.entity';
 import { HorarioAtencion } from './entities/horarioAtencion.entity';
+import { Between, IsNull } from 'typeorm';
 
 @Injectable()
 export class PrestadoresService {
@@ -244,7 +245,7 @@ export class PrestadoresService {
                 const nuevaDireccion = this.direccionRepo.create({
                     calle: direccionCentro.calle,
                     numero: direccionCentro.numero,
-                    localidad: direccionCentro.localidad, 
+                    localidad: direccionCentro.localidad,
                     codigoPostal: direccionCentro.codigoPostal,
                     esDireccionCentroMedico: true,
                     centroMedicoId: centroMedicoId,
@@ -289,4 +290,26 @@ export class PrestadoresService {
         centroMedico.profesionales.splice(profesionalIndex, 1);
         await this.prestadorRepo.save(centroMedico);
     }
+
+    async filtrarPorFechas(fechaDesde: string, fechaHasta: string): Promise<Prestador[]> {
+        return this.prestadorRepo.find({
+            where: [
+                // fechaAlta dentro del rango
+                { fechaAlta: Between(fechaDesde, fechaHasta) },
+
+                // fechaBaja dentro del rango
+                { fechaBaja: Between(fechaDesde, fechaHasta) },
+
+                // alta dentro del periodo y sin baja
+                { fechaAlta: Between(fechaDesde, fechaHasta), fechaBaja: IsNull() },
+            ],
+            relations: {
+                especialidades: true,
+                direccion: true,
+            },
+            order: { fechaAlta: 'ASC', fechaBaja: 'ASC' },
+        });
+    }
+
+
 }
